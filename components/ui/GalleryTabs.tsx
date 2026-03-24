@@ -11,14 +11,14 @@ type Collection = {
   endDate?: string;
   dateFormatted: string;
   location: string;
-  cover: string;
-  photos: string[];
   description: string;
+  coverUrl: string;
+  photoCount: number;
 };
 
 type Props = {
   collections: Collection[];
-  moments: string[];
+  moments: Array<{ id: string; url: string }>;
 };
 
 export default function GalleryTabs({ collections, moments }: Props) {
@@ -65,7 +65,7 @@ export default function GalleryTabs({ collections, moments }: Props) {
                   <div className="grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-6 items-start">
                     <div className="overflow-hidden rounded-xl">
                       <Image
-                        src={`/images/gallery/${collection.slug}/${collection.cover}`}
+                        src={collection.coverUrl}
                         alt={collection.title}
                         width={400}
                         height={300}
@@ -83,7 +83,7 @@ export default function GalleryTabs({ collections, moments }: Props) {
                           {collection.dateFormatted}
                         </time>
                         <span className="w-1 h-1 rounded-full bg-ink-muted" />
-                        <span>{collection.photos.length} photos</span>
+                        <span>{collection.photoCount} photos</span>
                       </div>
                       {collection.description && (
                         <p className="text-sm text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
@@ -106,13 +106,13 @@ export default function GalleryTabs({ collections, moments }: Props) {
         <>
           {moments.length > 0 ? (
             <div className="columns-2 sm:columns-3 gap-4 space-y-4">
-              {moments.map((src) => (
+              {moments.map((moment) => (
                 <div
-                  key={src}
+                  key={moment.id}
                   className="break-inside-avoid overflow-hidden rounded-xl"
                 >
                   <Image
-                    src={src}
+                    src={moment.url}
                     alt="Moment"
                     width={600}
                     height={400}

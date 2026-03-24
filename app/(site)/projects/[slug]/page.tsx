@@ -1,11 +1,16 @@
-import { getCollectionBySlug, getAllCollections, formatCollectionDate } from '@/lib/content';
+import { getCollectionBySlug, getAllCollectionSlugs } from '@/lib/db/collections';
+import { getPhotosByCollection, getPhotoUrl } from '@/lib/db/photos';
+import { formatCollectionDate } from '@/lib/content';
 import Image from 'next/image';
 import Link from 'next/link';
 
+export const revalidate = 60;
+export const dynamicParams = true;
+
 type Props = { params: { slug: string } };
 
-export default function CollectionPage({ params }: Props) {
-  const collection = getCollectionBySlug(params.slug);
+export default async function CollectionPage({ params }: Props) {
+  const collection = await getCollectionBySlug(params.slug);
 
   if (!collection)
     return (
@@ -21,6 +26,12 @@ export default function CollectionPage({ params }: Props) {
         </Link>
       </div>
     );
+
+  const photos = await getPhotosByCollection(collection.id);
+  const photoUrls = photos.map((p) => ({
+    id: p.id,
+    url: getPhotoUrl(p),
+  }));
 
   return (
     <div className="container py-16 animate-fade-in">
@@ -50,9 +61,9 @@ export default function CollectionPage({ params }: Props) {
         <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-label text-ink-muted mb-4">
           <span>{collection.location}</span>
           <span className="w-1 h-1 rounded-full bg-ink-muted" />
-          <time>{formatCollectionDate(collection.date, collection.endDate)}</time>
+          <time>{formatCollectionDate(collection.date, collection.end_date ?? undefined)}</time>
           <span className="w-1 h-1 rounded-full bg-ink-muted" />
-          <span>{collection.photos.length} photos</span>
+          <span>{photoUrls.length} photos</span>
         </div>
         <h1 className="text-4xl sm:text-5xl font-display font-medium mb-4 text-ink dark:text-ink-dark">
           {collection.title}
@@ -68,13 +79,13 @@ export default function CollectionPage({ params }: Props) {
 
       {/* Photo grid — masonry */}
       <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-        {collection.photos.map((photo) => (
+        {photoUrls.map((photo) => (
           <div
-            key={photo}
+            key={photo.id}
             className="break-inside-avoid overflow-hidden rounded-xl"
           >
             <Image
-              src={`/images/gallery/${collection.slug}/${photo}`}
+              src={photo.url}
               alt={collection.title}
               width={800}
               height={600}
@@ -87,6 +98,7 @@ export default function CollectionPage({ params }: Props) {
   );
 }
 
-export function generateStaticParams() {
-  return getAllCollections().map((c) => ({ slug: c.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllCollectionSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
