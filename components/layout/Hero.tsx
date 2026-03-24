@@ -67,14 +67,27 @@ export default function Hero({ profile }: Props) {
               {profile.highlights.map((h, i) => (
                 <li key={i} className="flex items-baseline gap-3">
                   <span className="w-1 h-1 rounded-full bg-ink-muted shrink-0 translate-y-[-1px]" />
-                  {h.url ? (
+                  {h.url && h.label ? (
+                    <span>
+                      {h.text.split(h.label)[0]}
+                      <a
+                        href={h.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink dark:hover:decoration-ink-dark transition-colors"
+                      >
+                        {h.label}
+                      </a>
+                      {h.text.split(h.label)[1] ?? ''}
+                    </span>
+                  ) : h.url ? (
                     <a
                       href={h.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink dark:hover:decoration-ink-dark transition-colors"
                     >
-                      {h.label ?? h.text}
+                      {h.text}
                     </a>
                   ) : (
                     h.text
