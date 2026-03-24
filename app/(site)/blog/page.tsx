@@ -1,6 +1,8 @@
 import PostCard from '@/components/blog/PostCard';
 import { getPosts, getAllTags } from '@/lib/db/posts';
 import { getSession } from '@/lib/auth';
+import AuthGate from '@/components/admin/AuthGate';
+import NewPostButton from '@/components/admin/NewPostButton';
 
 export const revalidate = 60;
 
@@ -41,6 +43,11 @@ export default async function BlogIndex({
         <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
           Thoughts, tutorials, and insights on software development and AI.
         </p>
+        <AuthGate>
+          <div className="mt-4">
+            <NewPostButton />
+          </div>
+        </AuthGate>
       </div>
 
       {/* Tag Filter */}
