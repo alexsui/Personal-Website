@@ -14,10 +14,15 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) return null;
 
         const adminEmail = process.env.ADMIN_EMAIL;
-        const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+        const rawHash = process.env.ADMIN_PASSWORD_HASH;
 
-        if (!adminEmail || !adminPasswordHash) return null;
+        if (!adminEmail || !rawHash) return null;
         if (credentials.email !== adminEmail) return null;
+
+        // Hash is stored as base64 on Vercel to avoid $ expansion issues
+        const adminPasswordHash = rawHash.startsWith('$2')
+          ? rawHash
+          : Buffer.from(rawHash, 'base64').toString('utf-8');
 
         const valid = await bcrypt.compare(credentials.password, adminPasswordHash);
         if (!valid) return null;
