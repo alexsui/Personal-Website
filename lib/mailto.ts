@@ -9,7 +9,7 @@ export function buildMailto({
   email: string;
   message: string;
 }) {
-  const subject = `[Website] ${name}`;
-  const body = `Name: ${name}%0AEmail: ${email}%0A%0A${encodeURIComponent(message)}`;
+  const subject = `[Website] ${name} (${email})`;
+  const body = encodeURIComponent(message);
   return `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${body}`;
 }
