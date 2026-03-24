@@ -1,6 +1,8 @@
 import Button from '@/components/ui/Button';
 import Image from 'next/image';
 import { DbProfile } from '@/lib/db/types';
+import AuthGate from '@/components/admin/AuthGate';
+import EditProfileButton from '@/components/admin/EditProfileButton';
 
 type Props = { profile: DbProfile };
 
@@ -12,7 +14,12 @@ export default function Hero({ profile }: Props) {
           {/* Text Content */}
           <div className="animate-fade-in-up">
             {/* Section label */}
-            <p className="section-label mb-6">Portfolio</p>
+            <div className="flex items-center gap-2 mb-6">
+              <p className="section-label">Portfolio</p>
+              <AuthGate>
+                <EditProfileButton profile={profile} />
+              </AuthGate>
+            </div>
 
             {/* Main heading — large editorial serif */}
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-medium leading-[1.05] mb-6 text-ink dark:text-ink-dark">

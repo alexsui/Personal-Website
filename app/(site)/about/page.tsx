@@ -1,6 +1,8 @@
 import { getAboutSections } from '@/lib/db/about';
 import { DbAboutSection } from '@/lib/db/types';
 import Button from '@/components/ui/Button';
+import AuthGate from '@/components/admin/AuthGate';
+import EditAboutButton from '@/components/admin/EditAboutButton';
 
 export const revalidate = 60;
 
@@ -38,9 +40,14 @@ export default async function AboutPage() {
             <p className="section-label mb-6">Interests</p>
             {interests.map((interest) => (
               <div key={interest.id}>
-                <h3 className="font-display text-2xl font-medium text-ink dark:text-ink-dark mb-2">
-                  {interest.title}
-                </h3>
+                <div className="flex items-center gap-2 mb-2">
+                  <h3 className="font-display text-2xl font-medium text-ink dark:text-ink-dark">
+                    {interest.title}
+                  </h3>
+                  <AuthGate>
+                    <EditAboutButton section={interest} />
+                  </AuthGate>
+                </div>
                 {(interest.content as { description?: string }).description && (
                   <p className="text-sm text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
                     {(interest.content as { description?: string }).description}
@@ -64,15 +71,20 @@ export default async function AboutPage() {
                 return (
                   <div key={exp.id} className="py-8 first:pt-0 last:pb-0">
                     <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1">
-                      <h3 className="font-display text-2xl font-medium text-ink dark:text-ink-dark">
-                        {exp.url ? (
-                          <a href={exp.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink dark:hover:decoration-ink-dark transition-colors">
-                            {exp.title}
-                          </a>
-                        ) : (
-                          exp.title
-                        )}
-                      </h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-display text-2xl font-medium text-ink dark:text-ink-dark">
+                          {exp.url ? (
+                            <a href={exp.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink dark:hover:decoration-ink-dark transition-colors">
+                              {exp.title}
+                            </a>
+                          ) : (
+                            exp.title
+                          )}
+                        </h3>
+                        <AuthGate>
+                          <EditAboutButton section={exp} />
+                        </AuthGate>
+                      </div>
                       <span className="text-xs font-medium uppercase tracking-label text-ink-muted whitespace-nowrap">
                         {period}
                       </span>
@@ -117,15 +129,20 @@ export default async function AboutPage() {
                 return (
                   <div key={edu.id} className="py-8 first:pt-0 last:pb-0">
                     <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1">
-                      <h3 className="font-display text-2xl font-medium text-ink dark:text-ink-dark">
-                        {edu.url ? (
-                          <a href={edu.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink dark:hover:decoration-ink-dark transition-colors">
-                            {edu.title}
-                          </a>
-                        ) : (
-                          edu.title
-                        )}
-                      </h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-display text-2xl font-medium text-ink dark:text-ink-dark">
+                          {edu.url ? (
+                            <a href={edu.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink dark:hover:decoration-ink-dark transition-colors">
+                              {edu.title}
+                            </a>
+                          ) : (
+                            edu.title
+                          )}
+                        </h3>
+                        <AuthGate>
+                          <EditAboutButton section={edu} />
+                        </AuthGate>
+                      </div>
                       <span className="text-xs font-medium uppercase tracking-label text-ink-muted whitespace-nowrap">
                         {period}
                       </span>
@@ -170,20 +187,25 @@ export default async function AboutPage() {
                 const content = pub.content as { bullets?: string[] };
                 return (
                   <div key={pub.id} className="py-8 first:pt-0 last:pb-0">
-                    {pub.url ? (
-                      <a
-                        href={pub.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-display text-2xl font-medium text-ink dark:text-ink-dark hover:opacity-60 transition-opacity"
-                      >
-                        {pub.title}
-                      </a>
-                    ) : (
-                      <span className="font-display text-2xl font-medium text-ink dark:text-ink-dark">
-                        {pub.title}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {pub.url ? (
+                        <a
+                          href={pub.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-display text-2xl font-medium text-ink dark:text-ink-dark hover:opacity-60 transition-opacity"
+                        >
+                          {pub.title}
+                        </a>
+                      ) : (
+                        <span className="font-display text-2xl font-medium text-ink dark:text-ink-dark">
+                          {pub.title}
+                        </span>
+                      )}
+                      <AuthGate>
+                        <EditAboutButton section={pub} />
+                      </AuthGate>
+                    </div>
                     {pub.subtitle && (
                       <p className="text-xs text-ink-muted mt-2">{pub.subtitle}</p>
                     )}
@@ -218,7 +240,12 @@ export default async function AboutPage() {
                   key={item.id}
                   className="text-ink-secondary dark:text-ink-dark-secondary pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-px before:bg-ink-muted"
                 >
-                  {item.title}
+                  <span className="inline-flex items-center gap-2">
+                    {item.title}
+                    <AuthGate>
+                      <EditAboutButton section={item} />
+                    </AuthGate>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -236,9 +263,14 @@ export default async function AboutPage() {
                 const content = group.content as { items?: string[] };
                 return (
                   <div key={group.id}>
-                    <h3 className="text-sm font-semibold font-sans text-ink dark:text-ink-dark mb-2.5">
-                      {group.title}
-                    </h3>
+                    <div className="flex items-center gap-2 mb-2.5">
+                      <h3 className="text-sm font-semibold font-sans text-ink dark:text-ink-dark">
+                        {group.title}
+                      </h3>
+                      <AuthGate>
+                        <EditAboutButton section={group} />
+                      </AuthGate>
+                    </div>
                     <div className="flex flex-wrap gap-2">
                       {(content.items ?? []).map((skill) => (
                         <span key={skill} className="tag">
