@@ -24,7 +24,7 @@ export default function PostEditor({ post, onClose }: Props) {
     post?.date ?? new Date().toISOString().split('T')[0]
   );
   const [summary, setSummary] = useState(post?.summary ?? '');
-  const [tags, setTags] = useState(post?.tags?.join(', ') ?? '');
+  const [tags, setTags] = useState(post?.tags?.join(', ') ?? 'featured');
   const [content, setContent] = useState(post?.content ?? '');
   const [tab, setTab] = useState<'write' | 'preview'>('write');
   const [previewHtml, setPreviewHtml] = useState('');
