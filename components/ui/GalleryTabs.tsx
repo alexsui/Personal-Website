@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import AuthGate from '@/components/admin/AuthGate';
+import MomentUploader from '@/components/admin/MomentUploader';
 
 type Collection = {
   slug: string;
@@ -124,6 +126,14 @@ export default function GalleryTabs({ collections, moments }: Props) {
           ) : (
             <p className="text-ink-muted py-10">No moments yet.</p>
           )}
+
+          {/* Moment uploader for authenticated users */}
+          <AuthGate>
+            <div className="mt-12 pt-10 border-t border-border dark:border-border-dark">
+              <h3 className="text-sm font-medium uppercase tracking-[0.12em] text-ink-muted mb-4">Upload Moments</h3>
+              <MomentUploader />
+            </div>
+          </AuthGate>
         </>
       )}
     </>

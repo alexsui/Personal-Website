@@ -2,6 +2,8 @@ import { getCollections } from '@/lib/db/collections';
 import { getPhotosByCollection, getMomentPhotos, getPhotoUrl } from '@/lib/db/photos';
 import { formatCollectionDate } from '@/lib/content';
 import GalleryTabs from '@/components/ui/GalleryTabs';
+import AuthGate from '@/components/admin/AuthGate';
+import NewCollectionButton from '@/components/admin/NewCollectionButton';
 
 export const revalidate = 60;
 
@@ -36,7 +38,12 @@ export default async function GalleryPage() {
     <div className="container py-16 animate-fade-in">
       {/* Page Header */}
       <div className="max-w-3xl mb-12">
-        <p className="section-label mb-4">Gallery</p>
+        <div className="flex items-center gap-4 mb-4">
+          <p className="section-label">Gallery</p>
+          <AuthGate>
+            <NewCollectionButton />
+          </AuthGate>
+        </div>
         <h1 className="text-4xl sm:text-5xl font-display font-medium mb-4 text-ink dark:text-ink-dark">
           Photography
         </h1>

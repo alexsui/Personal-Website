@@ -3,6 +3,9 @@ import { getPhotosByCollection, getPhotoUrl } from '@/lib/db/photos';
 import { formatCollectionDate } from '@/lib/content';
 import Image from 'next/image';
 import Link from 'next/link';
+import AuthGate from '@/components/admin/AuthGate';
+import EditCollectionButton from '@/components/admin/EditCollectionButton';
+import PhotoUploader from '@/components/admin/PhotoUploader';
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -65,11 +68,16 @@ export default async function CollectionPage({ params }: Props) {
           <span className="w-1 h-1 rounded-full bg-ink-muted" />
           <span>{photoUrls.length} photos</span>
         </div>
-        <h1 className="text-4xl sm:text-5xl font-display font-medium mb-4 text-ink dark:text-ink-dark">
-          {collection.title}
-        </h1>
+        <div className="flex items-center">
+          <h1 className="text-4xl sm:text-5xl font-display font-medium text-ink dark:text-ink-dark">
+            {collection.title}
+          </h1>
+          <AuthGate>
+            <EditCollectionButton collection={collection} />
+          </AuthGate>
+        </div>
         {collection.description && (
-          <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
+          <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed mt-4">
             {collection.description}
           </p>
         )}
@@ -94,6 +102,14 @@ export default async function CollectionPage({ params }: Props) {
           </div>
         ))}
       </div>
+
+      {/* Photo uploader for authenticated users */}
+      <AuthGate>
+        <div className="mt-12 pt-10 border-t border-border dark:border-border-dark">
+          <h3 className="text-sm font-medium uppercase tracking-[0.12em] text-ink-muted mb-4">Upload Photos</h3>
+          <PhotoUploader collectionId={collection.id} storagePath={`collections/${collection.slug}`} />
+        </div>
+      </AuthGate>
     </div>
   );
 }
