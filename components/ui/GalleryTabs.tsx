@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AuthGate from '@/components/admin/AuthGate';
 import MomentUploader from '@/components/admin/MomentUploader';
+import DeletablePhoto from '@/components/admin/DeletablePhoto';
 
 type Collection = {
   slug: string;
@@ -20,7 +21,7 @@ type Collection = {
 
 type Props = {
   collections: Collection[];
-  moments: Array<{ id: string; url: string }>;
+  moments: Array<{ id: string; url: string; storagePath: string }>;
 };
 
 export default function GalleryTabs({ collections, moments }: Props) {
@@ -113,12 +114,11 @@ export default function GalleryTabs({ collections, moments }: Props) {
                   key={moment.id}
                   className="break-inside-avoid overflow-hidden rounded-xl"
                 >
-                  <Image
-                    src={moment.url}
+                  <DeletablePhoto
+                    id={moment.id}
+                    url={moment.url}
+                    storagePath={moment.storagePath}
                     alt="Moment"
-                    width={600}
-                    height={400}
-                    className="w-full h-auto object-cover"
                   />
                 </div>
               ))}

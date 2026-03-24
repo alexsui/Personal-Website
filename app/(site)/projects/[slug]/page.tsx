@@ -1,8 +1,8 @@
 import { getCollectionBySlug, getAllCollectionSlugs } from '@/lib/db/collections';
 import { getPhotosByCollection, getPhotoUrl } from '@/lib/db/photos';
 import { formatCollectionDate } from '@/lib/content';
-import Image from 'next/image';
 import Link from 'next/link';
+import DeletablePhoto from '@/components/admin/DeletablePhoto';
 import AuthGate from '@/components/admin/AuthGate';
 import EditCollectionButton from '@/components/admin/EditCollectionButton';
 import PhotoUploader from '@/components/admin/PhotoUploader';
@@ -31,9 +31,10 @@ export default async function CollectionPage({ params }: Props) {
     );
 
   const photos = await getPhotosByCollection(collection.id);
-  const photoUrls = photos.map((p) => ({
+  const photoData = photos.map((p) => ({
     id: p.id,
     url: getPhotoUrl(p),
+    storagePath: p.storage_path,
   }));
 
   return (
@@ -66,7 +67,7 @@ export default async function CollectionPage({ params }: Props) {
           <span className="w-1 h-1 rounded-full bg-ink-muted" />
           <time>{formatCollectionDate(collection.date, collection.end_date ?? undefined)}</time>
           <span className="w-1 h-1 rounded-full bg-ink-muted" />
-          <span>{photoUrls.length} photos</span>
+          <span>{photoData.length} photos</span>
         </div>
         <div className="flex items-center">
           <h1 className="text-4xl sm:text-5xl font-display font-medium text-ink dark:text-ink-dark">
@@ -87,17 +88,17 @@ export default async function CollectionPage({ params }: Props) {
 
       {/* Photo grid — masonry */}
       <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-        {photoUrls.map((photo) => (
+        {photoData.map((photo) => (
           <div
             key={photo.id}
             className="break-inside-avoid overflow-hidden rounded-xl"
           >
-            <Image
-              src={photo.url}
+            <DeletablePhoto
+              id={photo.id}
+              url={photo.url}
+              storagePath={photo.storagePath}
               alt={collection.title}
-              width={800}
-              height={600}
-              className="w-full h-auto object-cover"
+              collectionSlug={collection.slug}
             />
           </div>
         ))}

@@ -32,6 +32,7 @@ export default async function GalleryPage() {
   const moments = dbMoments.map((p) => ({
     id: p.id,
     url: getPhotoUrl(p),
+    storagePath: p.storage_path,
   }));
 
   return (
