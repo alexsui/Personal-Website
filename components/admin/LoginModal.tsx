@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default function LoginModal() {
@@ -59,7 +60,7 @@ export default function LoginModal() {
         </svg>
       </button>
 
-      {open && (
+      {open && createPortal(
         <div className="fixed inset-0 z-[60] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
           <form
@@ -113,7 +114,8 @@ export default function LoginModal() {
               </button>
             </div>
           </form>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
