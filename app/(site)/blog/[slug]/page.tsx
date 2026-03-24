@@ -76,6 +76,11 @@ export default async function PostPage({ params }: Props) {
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-medium text-ink dark:text-ink-dark mb-5 leading-[1.1]">
               {post.title}
             </h1>
+            {post.draft && (
+              <span className="mt-2 text-xs font-medium uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2.5 py-1 rounded-full whitespace-nowrap shrink-0">
+                Draft
+              </span>
+            )}
             <EditPostButton post={post} />
           </div>
           {post.tags && post.tags.length > 0 && (
