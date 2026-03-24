@@ -1,11 +1,22 @@
-import { getLatestPosts, getAllCollections } from '@/lib/content';
 import Image from 'next/image';
 import Link from 'next/link';
+import { DbPost } from '@/lib/db/types';
 
-export default function PreviewList() {
-  const posts = getLatestPosts(2);
-  const collections = getAllCollections().slice(0, 2);
+type CollectionPreview = {
+  slug: string;
+  title: string;
+  location: string;
+  coverUrl: string;
+  dateFormatted: string;
+  photoCount: number;
+};
 
+type Props = {
+  posts: DbPost[];
+  collections: CollectionPreview[];
+};
+
+export default function PreviewList({ posts, collections }: Props) {
   return (
     <div className="space-y-20">
       {/* Latest Posts */}
@@ -68,7 +79,7 @@ export default function PreviewList() {
                 >
                   <div className="overflow-hidden rounded-lg shrink-0">
                     <Image
-                      src={`/images/gallery/${c.slug}/${c.cover}`}
+                      src={c.coverUrl}
                       alt={c.title}
                       width={200}
                       height={200}
@@ -80,7 +91,7 @@ export default function PreviewList() {
                       {c.title}
                     </h3>
                     <p className="text-xs font-medium uppercase tracking-label text-ink-muted mt-1">
-                      {c.location} · {c.photos.length} photos
+                      {c.location} · {c.photoCount} photos
                     </p>
                   </div>
                 </Link>

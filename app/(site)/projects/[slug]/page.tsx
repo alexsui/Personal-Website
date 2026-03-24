@@ -1,11 +1,19 @@
-import { getCollectionBySlug, getAllCollections, formatCollectionDate } from '@/lib/content';
-import Image from 'next/image';
+import { getCollectionBySlug, getAllCollectionSlugs } from '@/lib/db/collections';
+import { getPhotosByCollection, getPhotoUrl } from '@/lib/db/photos';
+import { formatCollectionDate } from '@/lib/content';
 import Link from 'next/link';
+import DeletablePhoto from '@/components/admin/DeletablePhoto';
+import AuthGate from '@/components/admin/AuthGate';
+import EditCollectionButton from '@/components/admin/EditCollectionButton';
+import PhotoUploader from '@/components/admin/PhotoUploader';
+
+export const revalidate = 60;
+export const dynamicParams = true;
 
 type Props = { params: { slug: string } };
 
-export default function CollectionPage({ params }: Props) {
-  const collection = getCollectionBySlug(params.slug);
+export default async function CollectionPage({ params }: Props) {
+  const collection = await getCollectionBySlug(params.slug);
 
   if (!collection)
     return (
@@ -21,6 +29,13 @@ export default function CollectionPage({ params }: Props) {
         </Link>
       </div>
     );
+
+  const photos = await getPhotosByCollection(collection.id);
+  const photoData = photos.map((p) => ({
+    id: p.id,
+    url: getPhotoUrl(p),
+    storagePath: p.storage_path,
+  }));
 
   return (
     <div className="container py-16 animate-fade-in">
@@ -50,15 +65,20 @@ export default function CollectionPage({ params }: Props) {
         <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-label text-ink-muted mb-4">
           <span>{collection.location}</span>
           <span className="w-1 h-1 rounded-full bg-ink-muted" />
-          <time>{formatCollectionDate(collection.date, collection.endDate)}</time>
+          <time>{formatCollectionDate(collection.date, collection.end_date ?? undefined)}</time>
           <span className="w-1 h-1 rounded-full bg-ink-muted" />
-          <span>{collection.photos.length} photos</span>
+          <span>{photoData.length} photos</span>
         </div>
-        <h1 className="text-4xl sm:text-5xl font-display font-medium mb-4 text-ink dark:text-ink-dark">
-          {collection.title}
-        </h1>
+        <div className="flex items-center">
+          <h1 className="text-4xl sm:text-5xl font-display font-medium text-ink dark:text-ink-dark">
+            {collection.title}
+          </h1>
+          <AuthGate>
+            <EditCollectionButton collection={collection} />
+          </AuthGate>
+        </div>
         {collection.description && (
-          <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
+          <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed mt-4">
             {collection.description}
           </p>
         )}
@@ -68,25 +88,34 @@ export default function CollectionPage({ params }: Props) {
 
       {/* Photo grid — masonry */}
       <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-        {collection.photos.map((photo) => (
+        {photoData.map((photo) => (
           <div
-            key={photo}
+            key={photo.id}
             className="break-inside-avoid overflow-hidden rounded-xl"
           >
-            <Image
-              src={`/images/gallery/${collection.slug}/${photo}`}
+            <DeletablePhoto
+              id={photo.id}
+              url={photo.url}
+              storagePath={photo.storagePath}
               alt={collection.title}
-              width={800}
-              height={600}
-              className="w-full h-auto object-cover"
+              collectionSlug={collection.slug}
             />
           </div>
         ))}
       </div>
+
+      {/* Photo uploader for authenticated users */}
+      <AuthGate>
+        <div className="mt-12 pt-10 border-t border-border dark:border-border-dark">
+          <h3 className="text-sm font-medium uppercase tracking-[0.12em] text-ink-muted mb-4">Upload Photos</h3>
+          <PhotoUploader collectionId={collection.id} storagePath={`collections/${collection.slug}`} />
+        </div>
+      </AuthGate>
     </div>
   );
 }
 
-export function generateStaticParams() {
-  return getAllCollections().map((c) => ({ slug: c.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllCollectionSlugs();
+  return slugs.map((slug) => ({ slug }));
 }

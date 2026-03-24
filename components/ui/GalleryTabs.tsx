@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import AuthGate from '@/components/admin/AuthGate';
+import MomentUploader from '@/components/admin/MomentUploader';
+import DeletablePhoto from '@/components/admin/DeletablePhoto';
 
 type Collection = {
   slug: string;
@@ -11,14 +14,14 @@ type Collection = {
   endDate?: string;
   dateFormatted: string;
   location: string;
-  cover: string;
-  photos: string[];
   description: string;
+  coverUrl: string;
+  photoCount: number;
 };
 
 type Props = {
   collections: Collection[];
-  moments: string[];
+  moments: Array<{ id: string; url: string; storagePath: string }>;
 };
 
 export default function GalleryTabs({ collections, moments }: Props) {
@@ -65,7 +68,7 @@ export default function GalleryTabs({ collections, moments }: Props) {
                   <div className="grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-6 items-start">
                     <div className="overflow-hidden rounded-xl">
                       <Image
-                        src={`/images/gallery/${collection.slug}/${collection.cover}`}
+                        src={collection.coverUrl}
                         alt={collection.title}
                         width={400}
                         height={300}
@@ -83,7 +86,7 @@ export default function GalleryTabs({ collections, moments }: Props) {
                           {collection.dateFormatted}
                         </time>
                         <span className="w-1 h-1 rounded-full bg-ink-muted" />
-                        <span>{collection.photos.length} photos</span>
+                        <span>{collection.photoCount} photos</span>
                       </div>
                       {collection.description && (
                         <p className="text-sm text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
@@ -106,17 +109,16 @@ export default function GalleryTabs({ collections, moments }: Props) {
         <>
           {moments.length > 0 ? (
             <div className="columns-2 sm:columns-3 gap-4 space-y-4">
-              {moments.map((src) => (
+              {moments.map((moment) => (
                 <div
-                  key={src}
+                  key={moment.id}
                   className="break-inside-avoid overflow-hidden rounded-xl"
                 >
-                  <Image
-                    src={src}
+                  <DeletablePhoto
+                    id={moment.id}
+                    url={moment.url}
+                    storagePath={moment.storagePath}
                     alt="Moment"
-                    width={600}
-                    height={400}
-                    className="w-full h-auto object-cover"
                   />
                 </div>
               ))}
@@ -124,6 +126,14 @@ export default function GalleryTabs({ collections, moments }: Props) {
           ) : (
             <p className="text-ink-muted py-10">No moments yet.</p>
           )}
+
+          {/* Moment uploader for authenticated users */}
+          <AuthGate>
+            <div className="mt-12 pt-10 border-t border-border dark:border-border-dark">
+              <h3 className="text-sm font-medium uppercase tracking-[0.12em] text-ink-muted mb-4">Upload Moments</h3>
+              <MomentUploader />
+            </div>
+          </AuthGate>
         </>
       )}
     </>

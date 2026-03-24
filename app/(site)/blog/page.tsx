@@ -1,5 +1,11 @@
 import PostCard from '@/components/blog/PostCard';
-import { getAllPosts, getAllTags } from '@/lib/content';
+import { getPosts, getAllTags } from '@/lib/db/posts';
+import { getSession } from '@/lib/auth';
+import AuthGate from '@/components/admin/AuthGate';
+import NewPostButton from '@/components/admin/NewPostButton';
+import EditPostButton from '@/components/admin/EditPostButton';
+
+export const revalidate = 60;
 
 function getTagFromSearch(searchParams: {
   [key: string]: string | string[] | undefined;
@@ -8,16 +14,32 @@ function getTagFromSearch(searchParams: {
   return tag;
 }
 
-export default function BlogIndex({
+export default async function BlogIndex({
   searchParams = {} as any,
 }: {
   searchParams?: any;
 }) {
   const tag = getTagFromSearch(searchParams);
-  const posts = getAllPosts().filter((p) =>
+
+  const session = await getSession();
+  const includeDrafts = !!session;
+
+  const [allPosts, tags] = await Promise.all([
+    getPosts(includeDrafts),
+    getAllTags(),
+  ]);
+
+  const filtered = allPosts.filter((p) =>
     tag ? (p.tags || []).includes(tag) : true
   );
-  const tags = getAllTags();
+
+  // When showing all posts, featured posts come first
+  const posts = !tag
+    ? [
+        ...filtered.filter((p) => (p.tags || []).includes('featured')),
+        ...filtered.filter((p) => !(p.tags || []).includes('featured')),
+      ]
+    : filtered;
 
   return (
     <div className="container py-16 animate-fade-in">
@@ -30,6 +52,11 @@ export default function BlogIndex({
         <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
           Thoughts, tutorials, and insights on software development and AI.
         </p>
+        <AuthGate>
+          <div className="mt-4">
+            <NewPostButton />
+          </div>
+        </AuthGate>
       </div>
 
       {/* Tag Filter */}
@@ -65,8 +92,11 @@ export default function BlogIndex({
       {/* Posts */}
       <div className="space-y-0 divide-y divide-border dark:divide-border-dark">
         {posts.map((p) => (
-          <div key={p.slug} className="py-8 first:pt-0 last:pb-0">
-            <PostCard post={p} />
+          <div key={p.slug} className="py-8 first:pt-0 last:pb-0 flex items-start gap-3">
+            <div className="flex-1 min-w-0">
+              <PostCard post={p} />
+            </div>
+            <EditPostButton post={p} />
           </div>
         ))}
       </div>

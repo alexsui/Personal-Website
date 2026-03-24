@@ -1,12 +1,26 @@
-import { getPostBySlug } from '@/lib/content';
+import { getPostBySlug, getAllPostSlugs } from '@/lib/db/posts';
+import { getSession } from '@/lib/auth';
 import { mdToHtml } from '@/lib/markdown';
 import Link from 'next/link';
+import EditPostButton from '@/components/admin/EditPostButton';
+
+export const revalidate = 60;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const slugs = await getAllPostSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
 
 type Props = { params: { slug: string } };
 
 export default async function PostPage({ params }: Props) {
-  const record = getPostBySlug(params.slug);
-  if (!record)
+  const session = await getSession();
+  const includeDrafts = !!session;
+
+  const post = await getPostBySlug(params.slug, includeDrafts);
+
+  if (!post)
     return (
       <div className="container py-16 text-center">
         <h1 className="text-2xl font-display font-medium text-ink dark:text-ink-dark mb-4">
@@ -21,7 +35,7 @@ export default async function PostPage({ params }: Props) {
       </div>
     );
 
-  const html = await mdToHtml(record.content);
+  const html = await mdToHtml(post.content);
 
   return (
     <div className="container py-16 animate-fade-in">
@@ -50,20 +64,28 @@ export default async function PostPage({ params }: Props) {
         {/* Article header */}
         <header className="mb-12">
           <p className="section-label mb-4">
-            <time dateTime={record.meta.date}>
-              {new Date(record.meta.date).toLocaleDateString('en-US', {
+            <time dateTime={post.date}>
+              {new Date(post.date).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
               })}
             </time>
           </p>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-medium text-ink dark:text-ink-dark mb-5 leading-[1.1]">
-            {record.meta.title}
-          </h1>
-          {record.meta.tags && record.meta.tags.length > 0 && (
+          <div className="flex items-start gap-3">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-medium text-ink dark:text-ink-dark mb-5 leading-[1.1]">
+              {post.title}
+            </h1>
+            {post.draft && (
+              <span className="mt-2 text-xs font-medium uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2.5 py-1 rounded-full whitespace-nowrap shrink-0">
+                Draft
+              </span>
+            )}
+            <EditPostButton post={post} />
+          </div>
+          {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {record.meta.tags.map((tag: string) => (
+              {post.tags.map((tag: string) => (
                 <Link
                   key={tag}
                   href={`/blog?tag=${encodeURIComponent(tag)}`}

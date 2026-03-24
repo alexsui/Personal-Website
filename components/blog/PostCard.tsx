@@ -9,6 +9,7 @@ export default function PostCard({
     date: string;
     summary: string;
     tags?: string[];
+    draft?: boolean;
   };
 }) {
   return (
@@ -18,6 +19,11 @@ export default function PostCard({
         <h3 className="text-2xl font-display font-medium text-ink dark:text-ink-dark group-hover:opacity-60 transition-opacity">
           {post.title}
         </h3>
+        {post.draft && (
+          <span className="text-[10px] font-medium uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full whitespace-nowrap">
+            Draft
+          </span>
+        )}
         <time
           dateTime={post.date}
           className="text-xs font-medium uppercase tracking-label text-ink-muted whitespace-nowrap"
