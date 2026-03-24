@@ -3,6 +3,7 @@ import { getPosts, getAllTags } from '@/lib/db/posts';
 import { getSession } from '@/lib/auth';
 import AuthGate from '@/components/admin/AuthGate';
 import NewPostButton from '@/components/admin/NewPostButton';
+import EditPostButton from '@/components/admin/EditPostButton';
 
 export const revalidate = 60;
 
@@ -83,8 +84,11 @@ export default async function BlogIndex({
       {/* Posts */}
       <div className="space-y-0 divide-y divide-border dark:divide-border-dark">
         {posts.map((p) => (
-          <div key={p.slug} className="py-8 first:pt-0 last:pb-0">
-            <PostCard post={p} />
+          <div key={p.slug} className="py-8 first:pt-0 last:pb-0 flex items-start gap-3">
+            <div className="flex-1 min-w-0">
+              <PostCard post={p} />
+            </div>
+            <EditPostButton post={p} />
           </div>
         ))}
       </div>

@@ -2,7 +2,6 @@ import { getPostBySlug, getAllPostSlugs } from '@/lib/db/posts';
 import { getSession } from '@/lib/auth';
 import { mdToHtml } from '@/lib/markdown';
 import Link from 'next/link';
-import AuthGate from '@/components/admin/AuthGate';
 import EditPostButton from '@/components/admin/EditPostButton';
 
 export const revalidate = 60;
@@ -73,13 +72,11 @@ export default async function PostPage({ params }: Props) {
               })}
             </time>
           </p>
-          <div className="flex items-start">
+          <div className="flex items-start gap-3">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-medium text-ink dark:text-ink-dark mb-5 leading-[1.1]">
               {post.title}
             </h1>
-            <AuthGate>
-              <EditPostButton post={post} />
-            </AuthGate>
+            <EditPostButton post={post} />
           </div>
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
