@@ -1,0 +1,4 @@
+model = "gpt-5"
+model_reasoning_effort = "high"
+[projects."/Users/samuel/Developer/personal-website"]
+trust_level = "trusted"
