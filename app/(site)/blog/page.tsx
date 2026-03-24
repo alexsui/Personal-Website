@@ -1,5 +1,8 @@
 import PostCard from '@/components/blog/PostCard';
-import { getAllPosts, getAllTags } from '@/lib/content';
+import { getPosts, getAllTags } from '@/lib/db/posts';
+import { getSession } from '@/lib/auth';
+
+export const revalidate = 60;
 
 function getTagFromSearch(searchParams: {
   [key: string]: string | string[] | undefined;
@@ -8,16 +11,24 @@ function getTagFromSearch(searchParams: {
   return tag;
 }
 
-export default function BlogIndex({
+export default async function BlogIndex({
   searchParams = {} as any,
 }: {
   searchParams?: any;
 }) {
   const tag = getTagFromSearch(searchParams);
-  const posts = getAllPosts().filter((p) =>
+
+  const session = await getSession();
+  const includeDrafts = !!session;
+
+  const [allPosts, tags] = await Promise.all([
+    getPosts(includeDrafts),
+    getAllTags(),
+  ]);
+
+  const posts = allPosts.filter((p) =>
     tag ? (p.tags || []).includes(tag) : true
   );
-  const tags = getAllTags();
 
   return (
     <div className="container py-16 animate-fade-in">
