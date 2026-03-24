@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { generateSlug } from '@/lib/slug';
 import {
   createPostAction,
@@ -18,6 +19,7 @@ type Props = {
 
 export default function PostEditor({ post, onClose }: Props) {
   const isNew = !post;
+  const router = useRouter();
   const [title, setTitle] = useState(post?.title ?? '');
   const [slug, setSlug] = useState(post?.slug ?? '');
   const [date, setDate] = useState(
@@ -54,24 +56,26 @@ export default function PostEditor({ post, onClose }: Props) {
         .map((t) => t.trim())
         .filter(Boolean);
       if (isNew) {
-        await createPostAction({
+        const created = await createPostAction({
           title,
           date,
           summary,
           content,
           tags: tagList,
         });
+        onClose();
+        router.push(`/blog/${created.slug}`);
       } else {
         await updatePostAction(post.id, {
           title,
-          slug,
           date,
           summary,
           content,
           tags: tagList,
         });
+        onClose();
+        router.refresh();
       }
-      onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save');
     } finally {
@@ -82,7 +86,7 @@ export default function PostEditor({ post, onClose }: Props) {
   async function handleDelete() {
     if (!post || !confirm('Delete this post? This cannot be undone.')) return;
     await deletePostAction(post.id, post.slug);
-    onClose();
+    router.push('/blog');
   }
 
   async function handleToggleDraft() {
@@ -110,18 +114,20 @@ export default function PostEditor({ post, onClose }: Props) {
         />
       </div>
 
-      {/* Slug */}
-      <div>
-        <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">
-          Slug
-        </label>
-        <input
-          type="text"
-          value={slug}
-          onChange={(e) => setSlug(e.target.value)}
-          className="input w-full"
-        />
-      </div>
+      {/* Slug — only show for new posts */}
+      {isNew && (
+        <div>
+          <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">
+            Slug
+          </label>
+          <input
+            type="text"
+            value={slug}
+            onChange={(e) => setSlug(e.target.value)}
+            className="input w-full"
+          />
+        </div>
+      )}
 
       {/* Date */}
       <div>

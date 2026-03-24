@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { generateSlug } from '@/lib/slug';
 import { createCollectionAction, updateCollectionAction, deleteCollectionAction } from '@/app/actions/collections';
 import { DbCollection } from '@/lib/db/types';
@@ -12,8 +13,8 @@ type Props = {
 
 export default function CollectionEditor({ collection, onClose }: Props) {
   const isNew = !collection;
+  const router = useRouter();
   const [title, setTitle] = useState(collection?.title ?? '');
-  const [slug, setSlug] = useState(collection?.slug ?? '');
   const [location, setLocation] = useState(collection?.location ?? '');
   const [date, setDate] = useState(collection?.date ?? new Date().toISOString().split('T')[0]);
   const [endDate, setEndDate] = useState(collection?.end_date ?? '');
@@ -21,20 +22,19 @@ export default function CollectionEditor({ collection, onClose }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (isNew && title) setSlug(generateSlug(title));
-  }, [title, isNew]);
-
   async function handleSave() {
     setSaving(true);
     setError('');
     try {
       if (isNew) {
-        await createCollectionAction({ title, date, end_date: endDate || undefined, location, description });
+        const created = await createCollectionAction({ title, date, end_date: endDate || undefined, location, description });
+        onClose();
+        router.push(`/projects/${created.slug}`);
       } else {
-        await updateCollectionAction(collection.id, { title, slug, date, end_date: endDate || null, location, description });
+        await updateCollectionAction(collection.id, { title, date, end_date: endDate || null, location, description });
+        onClose();
+        router.refresh();
       }
-      onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save');
     } finally {
@@ -45,7 +45,7 @@ export default function CollectionEditor({ collection, onClose }: Props) {
   async function handleDelete() {
     if (!collection || !confirm('Delete this collection and all its photos? This cannot be undone.')) return;
     await deleteCollectionAction(collection.id, collection.slug);
-    onClose();
+    router.push('/projects');
   }
 
   return (
@@ -54,10 +54,6 @@ export default function CollectionEditor({ collection, onClose }: Props) {
       <div>
         <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Title</label>
         <input type="text" value={title} onChange={e => setTitle(e.target.value)} className="input w-full" />
-      </div>
-      <div>
-        <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Slug</label>
-        <input type="text" value={slug} onChange={e => setSlug(e.target.value)} className="input w-full" />
       </div>
       <div>
         <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Location</label>
