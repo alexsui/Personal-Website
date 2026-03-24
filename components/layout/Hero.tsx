@@ -67,7 +67,7 @@ export default function Hero({ profile }: Props) {
               {profile.highlights.map((h, i) => (
                 <li key={i} className="flex items-baseline gap-3">
                   <span className="w-1 h-1 rounded-full bg-ink-muted shrink-0 translate-y-[-1px]" />
-                  {h.url && h.label ? (
+                  {h.url && h.label && h.text.includes(h.label) ? (
                     <span>
                       {h.text.split(h.label)[0]}
                       <a
