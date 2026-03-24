@@ -29,9 +29,17 @@ export default async function BlogIndex({
     getAllTags(),
   ]);
 
-  const posts = allPosts.filter((p) =>
+  const filtered = allPosts.filter((p) =>
     tag ? (p.tags || []).includes(tag) : true
   );
+
+  // When showing all posts, featured posts come first
+  const posts = !tag
+    ? [
+        ...filtered.filter((p) => (p.tags || []).includes('featured')),
+        ...filtered.filter((p) => !(p.tags || []).includes('featured')),
+      ]
+    : filtered;
 
   return (
     <div className="container py-16 animate-fade-in">
