@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { createPhotoAction } from '@/app/actions/photos';
-import Image from 'next/image';
 
 type Props = {
   collectionId: string | null;
@@ -21,6 +21,7 @@ export default function PhotoUploader({ collectionId, storagePath }: Props) {
   const [items, setItems] = useState<UploadItem[]>([]);
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   // Clean up blob URLs on unmount
   useEffect(() => {
@@ -107,6 +108,12 @@ export default function PhotoUploader({ collectionId, storagePath }: Props) {
       }
     }
     setUploading(false);
+    // Clear completed items and refresh the page to show new photos in the grid
+    setItems((prev) => {
+      prev.filter((i) => i.status === 'done').forEach((i) => URL.revokeObjectURL(i.preview));
+      return prev.filter((i) => i.status !== 'done');
+    });
+    router.refresh();
   }
 
   function removeItem(idx: number) {
