@@ -62,13 +62,9 @@ export default async function CollectionPage({ params }: Props) {
 
       {/* Header */}
       <div className="max-w-3xl mb-12">
-        <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-label text-ink-muted mb-4">
-          <span>{collection.location}</span>
-          <span className="w-1 h-1 rounded-full bg-ink-muted" />
-          <time>{formatCollectionDate(collection.date, collection.end_date ?? undefined)}</time>
-          <span className="w-1 h-1 rounded-full bg-ink-muted" />
-          <span>{photoData.length} photos</span>
-        </div>
+        <p className="text-xs font-medium uppercase tracking-label text-ink-muted mb-4">
+          {collection.location} · {formatCollectionDate(collection.date, collection.end_date ?? undefined)} · {photoData.length} photos
+        </p>
         <div className="flex items-center">
           <h1 className="text-4xl sm:text-5xl font-display font-medium text-ink dark:text-ink-dark">
             {collection.title}
