@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ThemeToggle from '@/components/ui/ThemeToggle';
-import LoginModal from '@/components/admin/LoginModal';
 
 export default function Header() {
   const pathname = usePathname();
@@ -52,7 +51,6 @@ export default function Header() {
           <div className="hidden sm:block w-px h-5 bg-border dark:bg-border-dark" />
 
           <ThemeToggle />
-          <LoginModal />
         </div>
       </div>
 

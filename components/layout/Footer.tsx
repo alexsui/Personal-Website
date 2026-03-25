@@ -1,7 +1,7 @@
 import Link from 'next/link';
+import AdminTrigger from '@/components/admin/AdminTrigger';
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
 
   const socialLinks = [
     {
@@ -33,9 +33,7 @@ export default function Footer() {
       <div className="h-px bg-border dark:bg-border-dark" />
       <div className="container py-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-ink-muted">
-            &copy; {currentYear} Samuel Toh
-          </p>
+          <AdminTrigger />
 
           <div className="flex items-center gap-3">
             {socialLinks.map((link) => (
