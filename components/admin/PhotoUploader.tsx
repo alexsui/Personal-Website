@@ -9,7 +9,10 @@ type Props = {
   storagePath: string;
 };
 
+let nextId = 0;
+
 type UploadItem = {
+  _id: number; // stable identity for state updates
   file: File;
   preview: string; // local blob URL for instant thumbnail
   status: 'pending' | 'uploading' | 'done' | 'error';
@@ -33,6 +36,7 @@ export default function PhotoUploader({ collectionId, storagePath }: Props) {
   function handleFiles(files: FileList | null) {
     if (!files) return;
     const newItems: UploadItem[] = Array.from(files).map((file) => ({
+      _id: nextId++,
       file,
       preview: URL.createObjectURL(file),
       status: 'pending' as const,
@@ -49,7 +53,7 @@ export default function PhotoUploader({ collectionId, storagePath }: Props) {
 
       setItems((prev) =>
         prev.map((i) =>
-          i === item ? { ...i, status: 'uploading' as const } : i
+          i._id === item._id ? { ...i, status: 'uploading' as const } : i
         )
       );
 
@@ -84,7 +88,7 @@ export default function PhotoUploader({ collectionId, storagePath }: Props) {
           });
           setItems((prev) =>
             prev.map((i) =>
-              i === item
+              i._id === item._id
                 ? { ...i, status: 'done' as const, url: result.url }
                 : i
             )
@@ -93,14 +97,14 @@ export default function PhotoUploader({ collectionId, storagePath }: Props) {
           const errMsg = data.errors?.[0]?.error || 'Upload failed';
           setItems((prev) =>
             prev.map((i) =>
-              i === item ? { ...i, status: 'error' as const, error: errMsg } : i
+              i._id === item._id ? { ...i, status: 'error' as const, error: errMsg } : i
             )
           );
         }
       } catch {
         setItems((prev) =>
           prev.map((i) =>
-            i === item
+            i._id === item._id
               ? { ...i, status: 'error' as const, error: 'Upload failed' }
               : i
           )
