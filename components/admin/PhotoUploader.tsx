@@ -58,10 +58,19 @@ export default function PhotoUploader({ collectionId, storagePath }: Props) {
         formData.append('path', storagePath);
         formData.append('files', item.file);
 
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 60000); // 60s timeout
+
         const res = await fetch('/api/upload', {
           method: 'POST',
           body: formData,
+          signal: controller.signal,
         });
+        clearTimeout(timeout);
+
+        if (!res.ok) {
+          throw new Error(`Upload returned ${res.status}: ${res.statusText}`);
+        }
         const data = await res.json();
 
         if (data.results?.length > 0) {
