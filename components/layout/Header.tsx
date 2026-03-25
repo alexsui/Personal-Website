@@ -1,10 +1,12 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function Header() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
     if (path === '/') return pathname === '/';
@@ -29,7 +31,7 @@ export default function Header() {
           Samuel Toh
         </Link>
 
-        {/* Navigation */}
+        {/* Desktop Navigation */}
         <div className="flex items-center gap-6">
           <nav className="hidden sm:flex items-center gap-1">
             {navLinks.map((link) => (
@@ -51,8 +53,48 @@ export default function Header() {
           <div className="hidden sm:block w-px h-5 bg-border dark:bg-border-dark" />
 
           <ThemeToggle />
+
+          {/* Hamburger button — mobile only */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="sm:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5"
+            aria-label="Toggle menu"
+          >
+            <span
+              className={`block w-5 h-px bg-ink dark:bg-ink-dark transition-all duration-200 ${
+                menuOpen ? 'rotate-45 translate-y-[3.5px]' : ''
+              }`}
+            />
+            <span
+              className={`block w-5 h-px bg-ink dark:bg-ink-dark transition-all duration-200 ${
+                menuOpen ? '-rotate-45 -translate-y-[3.5px]' : ''
+              }`}
+            />
+          </button>
         </div>
       </div>
+
+      {/* Mobile menu */}
+      {menuOpen && (
+        <nav className="sm:hidden border-t border-border dark:border-border-dark">
+          <div className="container py-4 flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className={`px-3 py-2.5 text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${
+                  isActive(link.href)
+                    ? 'text-ink dark:text-ink-dark bg-ink/5 dark:bg-ink-dark/5'
+                    : 'text-ink-muted hover:text-ink dark:hover:text-ink-dark hover:bg-ink/5 dark:hover:bg-ink-dark/5'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </nav>
+      )}
 
       {/* Bottom border line */}
       <div className="h-px bg-border dark:bg-border-dark" />
