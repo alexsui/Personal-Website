@@ -132,9 +132,9 @@ export default function AboutEditor({ section, defaultType, onClose }: Props) {
         <input type="text" value={title} onChange={e => setTitle(e.target.value)} className="input w-full" />
       </div>
 
-      {(type === 'experience' || type === 'education') && (
+      {(type === 'experience' || type === 'education' || type === 'publication') && (
         <div>
-          <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Subtitle (role/degree)</label>
+          <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">{type === 'publication' ? 'Subtitle (journal/venue)' : 'Subtitle (role/degree)'}</label>
           <input type="text" value={subtitle} onChange={e => setSubtitle(e.target.value)} className="input w-full" />
         </div>
       )}

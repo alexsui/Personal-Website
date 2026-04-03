@@ -493,7 +493,7 @@ async function migrateAboutSections() {
     title:
       'FairCDSR: Fairness-Aware Cross-Domain Sequential Recommendation via Multi-Interest Transfer and Contrastive Learning',
     subtitle:
-      'IEEE Transactions on Knowledge and Data Engineering (TKDE) | JCR Q1 | Impact Factor: 10.4',
+      'IEEE Transactions on Knowledge and Data Engineering (TKDE) | SCI Q1',
     date_start: null,
     date_end: null,
     url: 'https://ieeexplore.ieee.org/document/11048721',
