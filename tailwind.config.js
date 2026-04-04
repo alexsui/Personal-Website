@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        display: ['"Cormorant Garamond"', '"Noto Serif TC"', 'Georgia', 'serif'],
         sans: ['Manrope', 'system-ui', 'sans-serif'],
       },
       colors: {
