@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import AdminTrigger from '@/components/admin/AdminTrigger';
 import { getProfile } from '@/lib/db/profile';
+import { GITHUB_URL, LINKEDIN_URL } from '@/lib/social';
 
 export default async function Footer() {
   const profile = await getProfile().catch(() => null);
@@ -9,7 +10,7 @@ export default async function Footer() {
 
   const socialLinks = [
     {
-      href: 'https://github.com/alexsui',
+      href: GITHUB_URL,
       label: 'GitHub',
       icon: (
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -22,7 +23,7 @@ export default async function Footer() {
       ),
     },
     {
-      href: 'https://www.linkedin.com/in/samuel-toh-1510031a1/',
+      href: LINKEDIN_URL,
       label: 'LinkedIn',
       icon: (
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

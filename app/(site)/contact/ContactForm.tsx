@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { buildMailto } from '@/lib/mailto';
+import { LINKEDIN_URL } from '@/lib/social';
 import Button from '@/components/ui/Button';
 
 export default function ContactForm({ recipientEmail }: { recipientEmail: string }) {
@@ -145,6 +146,16 @@ export default function ContactForm({ recipientEmail }: { recipientEmail: string
           >
             {recipientEmail}
           </a>
+          {' '}— or connect on{' '}
+          <a
+            href={LINKEDIN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-ink dark:text-ink-dark underline underline-offset-4 decoration-border hover:decoration-ink transition-colors"
+          >
+            LinkedIn
+          </a>
+          .
         </p>
       </div>
     </div>
