@@ -1,4 +1,5 @@
 import { getAboutSections } from '@/lib/db/about';
+import { getProfile } from '@/lib/db/profile';
 import { DbAboutSection } from '@/lib/db/types';
 import Button from '@/components/ui/Button';
 import AuthGate from '@/components/admin/AuthGate';
@@ -15,7 +16,7 @@ function groupByType(sections: DbAboutSection[]): Record<string, DbAboutSection[
 }
 
 export default async function AboutPage() {
-  const sections = await getAboutSections();
+  const [sections, profile] = await Promise.all([getAboutSections(), getProfile()]);
   const grouped = groupByType(sections);
 
   const interests = grouped['interest'] ?? [];
@@ -30,9 +31,18 @@ export default async function AboutPage() {
       <div className="max-w-3xl">
         {/* Page Header */}
         <p className="section-label mb-4">About</p>
-        <h1 className="text-4xl sm:text-5xl font-display font-medium mb-16 text-ink dark:text-ink-dark">
+        <h1 className="text-4xl sm:text-5xl font-display font-medium mb-4 text-ink dark:text-ink-dark">
           About Me
         </h1>
+        <div className="mb-16">
+          {profile?.chinese_name && (
+            <p className="text-lg text-ink-secondary dark:text-ink-dark-secondary">
+              <span lang="zh-Hant">{profile.chinese_name}</span>
+              {' · '}
+              <span lang="en">{profile.name}</span>
+            </p>
+          )}
+        </div>
 
         {/* Interests Section */}
         {interests.length > 0 && (

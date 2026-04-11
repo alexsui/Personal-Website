@@ -7,7 +7,12 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 const TAP_COUNT = 5;
 const TAP_TIMEOUT = 2000; // 2 seconds to complete all taps
 
-export default function AdminTrigger() {
+type Props = {
+  name?: string;
+  chineseName?: string | null;
+};
+
+export default function AdminTrigger({ name = 'Samuel Toh', chineseName }: Props) {
   const { data: session } = useSession();
   const tapCount = useRef(0);
   const tapTimer = useRef<NodeJS.Timeout | null>(null);
@@ -68,7 +73,13 @@ export default function AdminTrigger() {
         className="text-sm text-ink-muted cursor-default select-none"
         onClick={handleTap}
       >
-        &copy; {currentYear} Samuel Toh
+        &copy; {currentYear} <span lang="en">{name}</span>
+        {chineseName && (
+          <>
+            {' · '}
+            <span lang="zh-Hant">{chineseName}</span>
+          </>
+        )}
       </p>
 
       {open && createPortal(

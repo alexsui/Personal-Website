@@ -1,3 +1,5 @@
+export const SITE_URL = 'https://samueltoh.dev';
+
 export function pageTitle(base: string, suffix = 'Samuel Toh') {
   return `${base} · ${suffix}`;
 }

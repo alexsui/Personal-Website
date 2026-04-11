@@ -6,6 +6,7 @@ import { updateProfile } from '@/lib/db/profile';
 
 export async function updateProfileAction(updates: {
   name?: string;
+  chinese_name?: string | null;
   bio?: string;
   photo_url?: string;
   email?: string;
@@ -15,8 +16,6 @@ export async function updateProfileAction(updates: {
 }) {
   await requireAuth();
   const profile = await updateProfile(updates);
-  revalidatePath('/');
-  revalidatePath('/about');
-  revalidatePath('/contact');
+  revalidatePath('/', 'layout');
   return profile;
 }

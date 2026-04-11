@@ -11,6 +11,7 @@ type Props = {
 
 export default function ProfileEditor({ profile, onClose }: Props) {
   const [name, setName] = useState(profile.name);
+  const [chineseName, setChineseName] = useState(profile.chinese_name ?? '');
   const [bio, setBio] = useState(profile.bio);
   const [email, setEmail] = useState(profile.email);
   const [github, setGithub] = useState(profile.social?.github ?? '');
@@ -39,6 +40,7 @@ export default function ProfileEditor({ profile, onClose }: Props) {
     try {
       await updateProfileAction({
         name,
+        chinese_name: chineseName.trim() || null,
         bio,
         email,
         social: { github: github || undefined, linkedin: linkedin || undefined },
@@ -60,6 +62,18 @@ export default function ProfileEditor({ profile, onClose }: Props) {
       <div>
         <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Name</label>
         <input type="text" value={name} onChange={e => setName(e.target.value)} className="input w-full" />
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Chinese Name</label>
+        <input
+          type="text"
+          value={chineseName}
+          onChange={e => setChineseName(e.target.value)}
+          lang="zh-Hant"
+          placeholder="e.g. 杜得人"
+          className="input w-full"
+        />
       </div>
 
       <div>

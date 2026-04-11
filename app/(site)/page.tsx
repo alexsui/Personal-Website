@@ -5,8 +5,13 @@ import { getCollections } from '@/lib/db/collections';
 import { getPhotosByCollection, getPhotoUrl, getCollectionPhotoCount } from '@/lib/db/photos';
 import { getProfile } from '@/lib/db/profile';
 import { formatCollectionDate } from '@/lib/content';
+import type { Metadata } from 'next';
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 export default async function HomePage() {
   const [posts, collections, profile] = await Promise.all([
@@ -50,6 +55,7 @@ export default async function HomePage() {
   const defaultProfile = {
     id: '',
     name: 'Samuel Toh',
+    chinese_name: '杜得人',
     bio: 'Dedicated to building AI products that make life easier.',
     photo_url: '/images/profile.jpg',
     email: '',

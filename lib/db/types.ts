@@ -38,6 +38,7 @@ export type DbPhoto = {
 export type DbProfile = {
   id: string;
   name: string;
+  chinese_name: string | null;
   bio: string;
   photo_url: string | null;
   email: string;

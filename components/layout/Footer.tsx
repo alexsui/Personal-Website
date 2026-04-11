@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import AdminTrigger from '@/components/admin/AdminTrigger';
+import { getProfile } from '@/lib/db/profile';
 
-export default function Footer() {
+export default async function Footer() {
+  const profile = await getProfile().catch(() => null);
+  const name = profile?.name ?? 'Samuel Toh';
+  const chineseName = profile?.chinese_name;
 
   const socialLinks = [
     {
@@ -33,7 +37,7 @@ export default function Footer() {
       <div className="h-px bg-border dark:bg-border-dark" />
       <div className="container py-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <AdminTrigger />
+          <AdminTrigger name={name} chineseName={chineseName} />
 
           <div className="flex items-center gap-3">
             {socialLinks.map((link) => (
