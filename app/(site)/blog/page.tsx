@@ -50,7 +50,7 @@ export default async function BlogIndex({
           Blog
         </h1>
         <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
-          Thoughts, tutorials, and insights on software development and AI.
+          Notes, essays, and ideas worth writing down.
         </p>
         <AuthGate>
           <div className="mt-4">
