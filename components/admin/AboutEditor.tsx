@@ -167,7 +167,7 @@ export default function AboutEditor({ section, defaultType, defaultSortOrder, on
             <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Location</label>
             <input type="text" value={location} onChange={e => setLocation(e.target.value)} className="input w-full" />
           </div>
-          <BulletsEditor />
+          {BulletsEditor()}
         </>
       )}
 
@@ -177,13 +177,13 @@ export default function AboutEditor({ section, defaultType, defaultSortOrder, on
             <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">GPA</label>
             <input type="text" value={gpa} onChange={e => setGpa(e.target.value)} className="input w-full" placeholder="e.g., 4.27/4.3" />
           </div>
-          <BulletsEditor />
+          {BulletsEditor()}
         </>
       )}
 
-      {type === 'publication' && <BulletsEditor />}
+      {type === 'publication' && BulletsEditor()}
 
-      {type === 'skill_group' && <ItemsEditor />}
+      {type === 'skill_group' && ItemsEditor()}
 
       {type === 'interest' && (
         <div>
