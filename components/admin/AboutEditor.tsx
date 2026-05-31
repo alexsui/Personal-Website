@@ -7,10 +7,11 @@ import { DbAboutSection, AboutSectionType } from '@/lib/db/types';
 type Props = {
   section?: DbAboutSection;
   defaultType?: AboutSectionType;
+  defaultSortOrder?: number;
   onClose: () => void;
 };
 
-export default function AboutEditor({ section, defaultType, onClose }: Props) {
+export default function AboutEditor({ section, defaultType, defaultSortOrder, onClose }: Props) {
   const isNew = !section;
   const [title, setTitle] = useState(section?.title ?? '');
   const [subtitle, setSubtitle] = useState(section?.subtitle ?? '');
@@ -18,7 +19,7 @@ export default function AboutEditor({ section, defaultType, onClose }: Props) {
   const [dateStart, setDateStart] = useState(section?.date_start ?? '');
   const [dateEnd, setDateEnd] = useState(section?.date_end ?? '');
   const [url, setUrl] = useState(section?.url ?? '');
-  const [sortOrder, setSortOrder] = useState(section?.sort_order ?? 0);
+  const [sortOrder, setSortOrder] = useState(section?.sort_order ?? defaultSortOrder ?? 0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 

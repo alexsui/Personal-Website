@@ -4,6 +4,8 @@ import { DbAboutSection } from '@/lib/db/types';
 import Button from '@/components/ui/Button';
 import AuthGate from '@/components/admin/AuthGate';
 import EditAboutButton from '@/components/admin/EditAboutButton';
+import AddAboutButton from '@/components/admin/AddAboutButton';
+import SectionGate from '@/components/admin/SectionGate';
 
 export const revalidate = 60;
 
@@ -45,9 +47,14 @@ export default async function AboutPage() {
         </div>
 
         {/* Interests Section */}
-        {interests.length > 0 && (
+        <SectionGate show={interests.length > 0}>
           <section className="mb-16">
-            <p className="section-label mb-6">Interests</p>
+            <div className="flex items-center gap-3 mb-6">
+              <p className="section-label">Interests</p>
+              <AuthGate>
+                <AddAboutButton type="interest" nextSortOrder={interests.length} />
+              </AuthGate>
+            </div>
             {interests.map((interest) => (
               <div key={interest.id}>
                 <div className="flex items-center gap-2 mb-2">
@@ -66,14 +73,19 @@ export default async function AboutPage() {
               </div>
             ))}
           </section>
-        )}
+        </SectionGate>
 
         <div className="h-px bg-border dark:bg-border-dark mb-16" />
 
         {/* Experience Section */}
-        {experiences.length > 0 && (
+        <SectionGate show={experiences.length > 0}>
           <section className="mb-16">
-            <p className="section-label mb-8">Experience</p>
+            <div className="flex items-center gap-3 mb-8">
+              <p className="section-label">Experience</p>
+              <AuthGate>
+                <AddAboutButton type="experience" nextSortOrder={experiences.length} />
+              </AuthGate>
+            </div>
             <div className="space-y-0 divide-y divide-border dark:divide-border-dark">
               {experiences.map((exp) => {
                 const content = exp.content as { bullets?: string[]; location?: string };
@@ -124,14 +136,19 @@ export default async function AboutPage() {
               })}
             </div>
           </section>
-        )}
+        </SectionGate>
 
         <div className="h-px bg-border dark:bg-border-dark mb-16" />
 
         {/* Education Section */}
-        {educations.length > 0 && (
+        <SectionGate show={educations.length > 0}>
           <section className="mb-16">
-            <p className="section-label mb-8">Education</p>
+            <div className="flex items-center gap-3 mb-8">
+              <p className="section-label">Education</p>
+              <AuthGate>
+                <AddAboutButton type="education" nextSortOrder={educations.length} />
+              </AuthGate>
+            </div>
             <div className="space-y-0 divide-y divide-border dark:divide-border-dark">
               {educations.map((edu) => {
                 const content = edu.content as { gpa?: string; bullets?: string[] };
@@ -184,14 +201,19 @@ export default async function AboutPage() {
               })}
             </div>
           </section>
-        )}
+        </SectionGate>
 
         <div className="h-px bg-border dark:bg-border-dark mb-16" />
 
         {/* Publications Section */}
-        {publications.length > 0 && (
+        <SectionGate show={publications.length > 0}>
           <section className="mb-16">
-            <p className="section-label mb-8">Publications</p>
+            <div className="flex items-center gap-3 mb-8">
+              <p className="section-label">Publications</p>
+              <AuthGate>
+                <AddAboutButton type="publication" nextSortOrder={publications.length} />
+              </AuthGate>
+            </div>
             <div className="space-y-0 divide-y divide-border dark:divide-border-dark">
               {publications.map((pub) => {
                 const content = pub.content as { bullets?: string[] };
@@ -236,14 +258,19 @@ export default async function AboutPage() {
               })}
             </div>
           </section>
-        )}
+        </SectionGate>
 
         <div className="h-px bg-border dark:bg-border-dark mb-16" />
 
         {/* Achievements Section */}
-        {achievements.length > 0 && (
+        <SectionGate show={achievements.length > 0}>
           <section className="mb-16">
-            <p className="section-label mb-8">Achievements & Certifications</p>
+            <div className="flex items-center gap-3 mb-8">
+              <p className="section-label">Achievements & Certifications</p>
+              <AuthGate>
+                <AddAboutButton type="achievement" nextSortOrder={achievements.length} />
+              </AuthGate>
+            </div>
             <ul className="space-y-2.5">
               {achievements.map((item) => (
                 <li
@@ -260,14 +287,19 @@ export default async function AboutPage() {
               ))}
             </ul>
           </section>
-        )}
+        </SectionGate>
 
         <div className="h-px bg-border dark:bg-border-dark mb-16" />
 
         {/* Skills Section */}
-        {skillGroups.length > 0 && (
+        <SectionGate show={skillGroups.length > 0}>
           <section className="mb-16">
-            <p className="section-label mb-6">Technical Skills</p>
+            <div className="flex items-center gap-3 mb-6">
+              <p className="section-label">Technical Skills</p>
+              <AuthGate>
+                <AddAboutButton type="skill_group" nextSortOrder={skillGroups.length} />
+              </AuthGate>
+            </div>
             <div className="space-y-5">
               {skillGroups.map((group) => {
                 const content = group.content as { items?: string[] };
@@ -293,7 +325,7 @@ export default async function AboutPage() {
               })}
             </div>
           </section>
-        )}
+        </SectionGate>
 
         {/* Resume Download */}
         <Button href="/resume.pdf" className="gap-2">
