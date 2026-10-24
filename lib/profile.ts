@@ -1,6 +1,6 @@
 export const profile = {
   name: 'Samuel Toh',
-  bio: 'Dedicated to building AI products that make life easier.',
+  bio: 'I’m a Machine Learning Engineer at momo, building recommendation systems and ads ranking. My work spans candidate retrieval, CTR modeling, A/B testing, and production serving.',
   photo: '/images/profile.jpg',
   recipientEmail: 'alexsui122@gmail.com',
   social: {

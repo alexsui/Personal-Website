@@ -27,6 +27,7 @@ export default function AboutEditor({ section, defaultType, defaultSortOrder, on
   const content = (section?.content ?? {}) as Record<string, unknown>;
   const [bullets, setBullets] = useState<string[]>((content.bullets as string[]) ?? []);
   const [location, setLocation] = useState((content.location as string) ?? '');
+  const [logoUrl, setLogoUrl] = useState((content.logo_url as string) ?? '');
   const [gpa, setGpa] = useState((content.gpa as string) ?? '');
   const [description, setDescription] = useState((content.description as string) ?? '');
   const [items, setItems] = useState<string[]>((content.items as string[]) ?? []);
@@ -34,7 +35,7 @@ export default function AboutEditor({ section, defaultType, defaultSortOrder, on
   function buildContent(): Record<string, unknown> {
     switch (type) {
       case 'experience':
-        return { bullets: bullets.filter(Boolean), location };
+        return { ...content, bullets: bullets.filter(Boolean), location, logo_url: logoUrl.trim() || null };
       case 'education':
         return { bullets: bullets.filter(Boolean), gpa };
       case 'publication':
@@ -163,6 +164,10 @@ export default function AboutEditor({ section, defaultType, defaultSortOrder, on
       {/* Type-specific content */}
       {type === 'experience' && (
         <>
+          <div>
+            <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Company Logo</label>
+            <input type="text" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} className="input w-full" placeholder="e.g., /images/companies/momo.png" />
+          </div>
           <div>
             <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Location</label>
             <input type="text" value={location} onChange={e => setLocation(e.target.value)} className="input w-full" />

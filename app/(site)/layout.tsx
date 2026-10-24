@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const profile = await getProfile().catch(() => null);
   const englishName = profile?.name ?? 'Samuel Toh';
   const chineseName = profile?.chinese_name ?? '杜得人';
-  const bio = profile?.bio ?? 'Dedicated to building AI products that make life easier.';
+  const bio = profile?.bio ?? 'Machine Learning Engineer at momo, working on recommendation systems, candidate retrieval, and ads ranking.';
   const title = `${englishName} · ${chineseName} — Personal Website`;
   const description = `Personal website of ${englishName} (${chineseName}). ${bio}`;
 

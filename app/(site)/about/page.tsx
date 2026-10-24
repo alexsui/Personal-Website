@@ -6,6 +6,7 @@ import AuthGate from '@/components/admin/AuthGate';
 import EditAboutButton from '@/components/admin/EditAboutButton';
 import AddAboutButton from '@/components/admin/AddAboutButton';
 import SectionGate from '@/components/admin/SectionGate';
+import Image from 'next/image';
 
 export const revalidate = 60;
 
@@ -88,37 +89,52 @@ export default async function AboutPage() {
             </div>
             <div className="space-y-0 divide-y divide-border dark:divide-border-dark">
               {experiences.map((exp) => {
-                const content = exp.content as { bullets?: string[]; location?: string };
+                const content = exp.content as { bullets?: string[]; location?: string; logo_url?: string };
                 const period = [exp.date_start, exp.date_end ?? 'Present'].filter(Boolean).join(' – ');
                 return (
                   <div key={exp.id} className="py-8 first:pt-0 last:pb-0">
-                    <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-display text-2xl font-medium text-ink dark:text-ink-dark">
-                          {exp.url ? (
-                            <a href={exp.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink dark:hover:decoration-ink-dark transition-colors">
-                              {exp.title}
-                            </a>
-                          ) : (
-                            exp.title
-                          )}
-                        </h3>
-                        <AuthGate>
-                          <EditAboutButton section={exp} />
-                        </AuthGate>
+                    <div className="flex items-start gap-3 sm:gap-4 mb-4">
+                      {content.logo_url && (
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-white p-1.5 dark:border-border-dark">
+                          <Image
+                            src={content.logo_url}
+                            alt=""
+                            width={48}
+                            height={48}
+                            className="h-full w-full object-contain"
+                          />
+                        </div>
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-display text-2xl font-medium text-ink dark:text-ink-dark">
+                              {exp.url ? (
+                                <a href={exp.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink dark:hover:decoration-ink-dark transition-colors">
+                                  {exp.title}
+                                </a>
+                              ) : (
+                                exp.title
+                              )}
+                            </h3>
+                            <AuthGate>
+                              <EditAboutButton section={exp} />
+                            </AuthGate>
+                          </div>
+                          <span className="text-xs font-medium uppercase tracking-label text-ink-muted whitespace-nowrap">
+                            {period}
+                          </span>
+                        </div>
+                        {exp.subtitle && (
+                          <p className="text-sm text-ink-secondary dark:text-ink-dark-secondary mb-1">
+                            {exp.subtitle}
+                          </p>
+                        )}
+                        {content.location && (
+                          <p className="text-xs text-ink-muted">{content.location}</p>
+                        )}
                       </div>
-                      <span className="text-xs font-medium uppercase tracking-label text-ink-muted whitespace-nowrap">
-                        {period}
-                      </span>
                     </div>
-                    {exp.subtitle && (
-                      <p className="text-sm text-ink-secondary dark:text-ink-dark-secondary mb-1">
-                        {exp.subtitle}
-                      </p>
-                    )}
-                    {content.location && (
-                      <p className="text-xs text-ink-muted mb-4">{content.location}</p>
-                    )}
                     {content.bullets && content.bullets.length > 0 && (
                       <ul className="space-y-2">
                         {content.bullets.map((item, i) => (

@@ -56,7 +56,7 @@ export default async function HomePage() {
     id: '',
     name: 'Samuel Toh',
     chinese_name: '杜得人',
-    bio: 'Dedicated to building AI products that make life easier.',
+    bio: 'I’m a Machine Learning Engineer at momo, building recommendation systems and ads ranking. My work spans candidate retrieval, CTR modeling, A/B testing, and production serving.',
     photo_url: '/images/profile.jpg',
     email: '',
     social: {},
