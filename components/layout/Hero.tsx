@@ -28,7 +28,7 @@ export default function Hero({ profile }: Props) {
             </h1>
 
             {/* Bio */}
-            <div className="space-y-4 font-display text-xl sm:text-[21px] text-ink-secondary dark:text-ink-dark-secondary leading-[1.4] max-w-lg lg:max-w-2xl mb-10">
+            <div className="space-y-4 text-base sm:text-lg text-ink-secondary dark:text-ink-dark-secondary leading-relaxed max-w-lg lg:max-w-2xl mb-10">
               {profile.bio.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
