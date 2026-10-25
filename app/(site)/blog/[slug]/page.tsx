@@ -75,7 +75,6 @@ export default async function PostPage({ params }: Props) {
                 day: 'numeric',
               })}
             </time>
-            <span className="text-xs text-ink-muted">{language.label}</span>
           </p>
           <div className="flex items-start gap-3">
             <h1 lang={getPostLanguage(post.title).code} className="text-3xl sm:text-4xl lg:text-5xl font-display font-medium text-ink dark:text-ink-dark mb-5 leading-[1.1]">

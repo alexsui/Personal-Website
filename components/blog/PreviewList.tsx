@@ -53,7 +53,6 @@ export default function PreviewList({ posts, collections, featuredPhoto }: Props
                       month: 'short',
                     })}
                   </time>
-                  <span className="text-xs text-ink-muted">{getPostLanguage(p.summary).label}</span>
                 </div>
                 <p lang={getPostLanguage(p.summary).code} className="text-sm text-ink-secondary dark:text-ink-dark-secondary leading-relaxed line-clamp-2">
                   {p.summary}

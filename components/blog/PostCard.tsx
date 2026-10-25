@@ -37,7 +37,6 @@ export default function PostCard({
             month: 'short',
           })}
         </time>
-        <span className="text-xs text-ink-muted">{language.label}</span>
       </div>
 
       {/* Summary */}
