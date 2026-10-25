@@ -10,7 +10,7 @@ export default function Hero({ profile }: Props) {
   return (
     <section className="py-20 sm:py-28">
       <div className="container">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] items-center gap-12 lg:gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_14rem] items-center gap-12">
           {/* Text Content */}
           <div className="animate-fade-in-up">
             {/* Section label */}
@@ -28,7 +28,7 @@ export default function Hero({ profile }: Props) {
             </h1>
 
             {/* Bio */}
-            <div className="space-y-4 text-base sm:text-lg text-ink-secondary dark:text-ink-dark-secondary leading-relaxed max-w-lg mb-10">
+            <div className="space-y-4 text-base sm:text-lg text-ink-secondary dark:text-ink-dark-secondary leading-relaxed max-w-lg lg:max-w-2xl mb-10">
               {profile.bio.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
@@ -48,7 +48,7 @@ export default function Hero({ profile }: Props) {
             className="justify-self-center lg:justify-self-end animate-fade-in-up"
             style={{ animationDelay: '120ms' }}
           >
-            <div className="relative w-56 h-56 sm:w-64 sm:h-64">
+            <div className="relative w-56 h-56 sm:w-64 sm:h-64 lg:w-56 lg:h-56">
               {/* Subtle decorative ring */}
               <div className="absolute inset-0 rounded-full border border-border dark:border-border-dark" />
               <div className="absolute inset-2 rounded-full overflow-hidden">
