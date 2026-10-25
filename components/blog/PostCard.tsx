@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getPostLanguage } from '@/lib/post-language';
 import { getPostCategory } from '@/lib/blog-categories';
 
 export default function PostCard({
@@ -13,12 +14,13 @@ export default function PostCard({
     draft?: boolean;
   };
 }) {
+  const language = getPostLanguage(post.summary);
   const category = getPostCategory(post.tags ?? []);
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
       {/* Title + Date */}
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
-        <h3 className="text-2xl font-display font-medium text-ink dark:text-ink-dark group-hover:opacity-60 transition-opacity">
+        <h3 lang={language.code} className="text-2xl font-display font-medium text-ink dark:text-ink-dark group-hover:opacity-60 transition-opacity">
           {post.title}
         </h3>
         {post.draft && (
@@ -35,14 +37,15 @@ export default function PostCard({
             month: 'short',
           })}
         </time>
+        <span className="text-xs text-ink-muted">{language.label}</span>
       </div>
 
       {/* Summary */}
-      <p className="text-sm text-ink-secondary dark:text-ink-dark-secondary leading-relaxed line-clamp-2">
+      <p lang={language.code} className="text-sm text-ink-secondary dark:text-ink-dark-secondary leading-relaxed line-clamp-2">
         {post.summary}
       </p>
 
-      {/* Tags */}
+      {/* Topic */}
       {category && (
         <p className="mt-3 text-xs text-ink-muted dark:text-ink-dark-secondary">
           {category.label}

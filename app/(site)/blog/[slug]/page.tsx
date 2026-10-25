@@ -1,4 +1,5 @@
 import { getPostBySlug, getAllPostSlugs } from '@/lib/db/posts';
+import { getPostLanguage } from '@/lib/post-language';
 import { getPostCategory } from '@/lib/blog-categories';
 import { getSession } from '@/lib/auth';
 import { mdToHtml } from '@/lib/markdown';
@@ -36,6 +37,7 @@ export default async function PostPage({ params }: Props) {
       </div>
     );
 
+  const language = getPostLanguage(post.content);
   const html = await mdToHtml(post.content);
   const category = getPostCategory(post.tags ?? []);
 
@@ -65,17 +67,18 @@ export default async function PostPage({ params }: Props) {
 
         {/* Article header */}
         <header className="mb-12">
-          <p className="section-label mb-4">
-            <time dateTime={post.date}>
+          <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-4">
+            <time dateTime={post.date} className="section-label">
               {new Date(post.date).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
               })}
             </time>
+            <span className="text-xs text-ink-muted">{language.label}</span>
           </p>
           <div className="flex items-start gap-3">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-medium text-ink dark:text-ink-dark mb-5 leading-[1.1]">
+            <h1 lang={getPostLanguage(post.title).code} className="text-3xl sm:text-4xl lg:text-5xl font-display font-medium text-ink dark:text-ink-dark mb-5 leading-[1.1]">
               {post.title}
             </h1>
             {post.draft && (
@@ -100,6 +103,7 @@ export default async function PostPage({ params }: Props) {
 
         {/* Article content */}
         <div
+          lang={language.code}
           className="prose"
           dangerouslySetInnerHTML={{ __html: html }}
         />

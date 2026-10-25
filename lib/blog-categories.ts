@@ -1,7 +1,7 @@
 export const blogCategories = [
-  { id: 'recommendation', label: '推薦系統' },
-  { id: 'data-engineering', label: '資料工程' },
-  { id: 'product', label: '產品開發' },
+  { id: 'recommendation', label: 'Recommendation Systems' },
+  { id: 'data-engineering', label: 'Data Engineering' },
+  { id: 'product', label: 'Product Development' },
 ] as const;
 
 export type BlogCategory = (typeof blogCategories)[number];

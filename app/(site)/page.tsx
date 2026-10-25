@@ -26,9 +26,9 @@ export default async function HomePage() {
   const featuredPhoto = selectedPhoto && selectedCollection ? {
     src: getPhotoUrl(selectedPhoto),
     href: `/projects/${selectedCollection.slug}`,
-    alt: '淡水夕陽下的橋與河面，前景有停泊的小船',
-    title: '淡水的傍晚',
-    caption: '橋、船，還有天色慢慢暗下來的河面。',
+    alt: 'A bridge over the Tamsui River at sunset, with a moored boat in the foreground',
+    title: 'An evening in Tamsui',
+    caption: 'A bridge, a boat, and the last light on the river.',
     location: selectedCollection.location,
   } : undefined;
   const previewCollections = collections.filter((collection) => collection.id !== selectedCollection?.id).slice(0, 2);

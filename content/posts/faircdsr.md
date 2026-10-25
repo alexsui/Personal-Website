@@ -1,7 +1,7 @@
 ---
-title: "FairCDSR: Fairness-Aware Cross-Domain Sequential Recommendation"
+title: "FairCDSR：我的碩士論文，關於跨領域推薦的公平性"
 date: "2024-07-01"
-summary: "My graduate thesis research was accepted for publication in IEEE Transactions on Knowledge and Data Engineering (TKDE), a core computer science journal ranked in the top tier (SCI Q1) with an Impact Factor of 9.0."
+summary: "我的碩士論文研究不同使用者族群在跨領域序列推薦中的表現差距，從資料擴增、對比學習與興趣轉移三個方向，嘗試同時改善推薦效果與公平性。研究已獲 IEEE TKDE 接受發表。"
 tags: ["featured", "deep learning", "research"]
 ---
 

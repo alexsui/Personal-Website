@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { getPostLanguage } from '@/lib/post-language';
 import { DbPost } from '@/lib/db/types';
 
 type CollectionPreview = {
@@ -42,18 +43,19 @@ export default function PreviewList({ posts, collections, featuredPhoto }: Props
           <div className="space-y-0 divide-y divide-border dark:divide-border-dark">
             {posts.map((p) => (
               <Link key={p.slug} href={`/blog/${p.slug}`} className="group block py-6 first:pt-0 last:pb-0">
-                <div className="flex items-baseline gap-3 mb-2">
-                  <h3 className="font-display text-3xl font-medium text-ink dark:text-ink-dark group-hover:opacity-60 transition-opacity">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
+                  <h3 lang={getPostLanguage(p.summary).code} className="font-display text-3xl font-medium text-ink dark:text-ink-dark group-hover:opacity-60 transition-opacity">
                     {p.title}
                   </h3>
-                  <time className="text-xs font-medium uppercase tracking-label text-ink-muted whitespace-nowrap">
+                  <time dateTime={p.date} className="text-xs font-medium uppercase tracking-label text-ink-muted whitespace-nowrap">
                     {new Date(p.date).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'short',
                     })}
                   </time>
+                  <span className="text-xs text-ink-muted">{getPostLanguage(p.summary).label}</span>
                 </div>
-                <p className="text-sm text-ink-secondary dark:text-ink-dark-secondary leading-relaxed line-clamp-2">
+                <p lang={getPostLanguage(p.summary).code} className="text-sm text-ink-secondary dark:text-ink-dark-secondary leading-relaxed line-clamp-2">
                   {p.summary}
                 </p>
               </Link>
@@ -95,7 +97,7 @@ export default function PreviewList({ posts, collections, featuredPhoto }: Props
                   <h3 className="font-display text-3xl sm:text-4xl font-medium leading-snug text-ink dark:text-ink-dark mb-4">{featuredPhoto.title}</h3>
                   <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed mb-8">{featuredPhoto.caption}</p>
                   <Link href={featuredPhoto.href} className="inline-flex items-center gap-2 text-sm text-accent dark:text-accent-dark underline underline-offset-4 decoration-accent/30">
-                    看淡水相簿 <span aria-hidden="true">→</span>
+                    View Tamsui album <span aria-hidden="true">→</span>
                   </Link>
                 </figcaption>
               </figure>

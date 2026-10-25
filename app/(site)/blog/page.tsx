@@ -1,5 +1,6 @@
 import PostCard from '@/components/blog/PostCard';
 import { getPosts } from '@/lib/db/posts';
+import { getPostLanguage } from '@/lib/post-language';
 import { blogCategories, getBlogCategory, getPostCategory } from '@/lib/blog-categories';
 import Link from 'next/link';
 import { getSession } from '@/lib/auth';
@@ -38,7 +39,7 @@ export default async function BlogIndex({
           Blog
         </h1>
         <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
-          記錄推薦系統、資料工程與產品開發中，慢慢想清楚的事情。
+          Notes from work, written mostly in Traditional Chinese.
         </p>
         <AuthGate>
           <div className="mt-4">
@@ -47,25 +48,25 @@ export default async function BlogIndex({
         </AuthGate>
       </div>
 
-      <nav aria-label="文章分類" className="mb-10 flex flex-wrap gap-x-2 sm:gap-x-7 gap-y-1 items-center border-b border-border dark:border-border-dark">
+      <nav aria-label="Post categories" className="mb-10 flex flex-wrap gap-x-6 sm:gap-x-7 gap-y-1 items-center border-b border-border dark:border-border-dark">
         {/* Use a document navigation when clearing query filters to avoid stale router results. */}
         <a
           href="/blog"
           aria-current={!category && !tag ? 'page' : undefined}
-          className={`-mb-px py-3 text-sm border-b transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current ${
+          className={`-mb-px py-3 text-sm whitespace-nowrap border-b transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current ${
             !category && !tag
               ? 'font-medium text-ink dark:text-ink-dark border-ink dark:border-ink-dark'
               : 'text-ink-muted border-transparent hover:text-ink dark:hover:text-ink-dark hover:border-ink/30 dark:hover:border-ink-dark/30'
           }`}
         >
-          全部
+          All
         </a>
         {blogCategories.map((item) => (
           <Link
             key={item.id}
             href={`/blog?category=${item.id}`}
             aria-current={category?.id === item.id ? 'page' : undefined}
-            className={`-mb-px py-3 text-sm border-b transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current ${
+            className={`-mb-px py-3 text-sm whitespace-nowrap border-b transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current ${
               category?.id === item.id
                 ? 'font-medium text-ink dark:text-ink-dark border-ink dark:border-ink-dark'
                 : 'text-ink-muted border-transparent hover:text-ink dark:hover:text-ink-dark hover:border-ink/30 dark:hover:border-ink-dark/30'
@@ -77,12 +78,12 @@ export default async function BlogIndex({
       </nav>
 
       {!category && !tag && featured.length > 0 && (
-        <section aria-label="精選研究" className="mb-12 border-l border-border dark:border-border-dark pl-5">
-          <h2 className="font-sans text-xs font-medium tracking-wide text-ink-muted mb-3">精選研究</h2>
+        <section aria-label="Featured research" className="mb-12 border-l border-border dark:border-border-dark pl-5">
+          <h2 className="font-sans text-xs font-medium tracking-wide text-ink-muted mb-3">Featured research</h2>
           <div className="space-y-4">
             {featured.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
-                <h3 className="font-display text-xl sm:text-2xl text-ink dark:text-ink-dark group-hover:underline underline-offset-4 decoration-border dark:decoration-border-dark">{post.title}</h3>
+                <h3 lang={getPostLanguage(post.summary).code} className="font-display text-xl sm:text-2xl text-ink dark:text-ink-dark group-hover:underline underline-offset-4 decoration-border dark:decoration-border-dark">{post.title}</h3>
                 <p className="mt-1 text-xs text-ink-muted">{new Date(post.date).getUTCFullYear()} · {getPostCategory(post.tags ?? [])?.label ?? 'Research'}</p>
               </Link>
             ))}
@@ -90,10 +91,10 @@ export default async function BlogIndex({
         </section>
       )}
 
-      <div className="flex items-baseline gap-3 mb-6">
-        <h2 className="font-sans text-sm font-semibold text-ink dark:text-ink-dark">{category?.label ?? (tag ? `標籤：${tag}` : '所有文章')}</h2>
-        <span className="text-xs text-ink-muted">{posts.length} 篇 · 由新到舊</span>
-        {tag && <a href="/blog" className="text-xs underline underline-offset-4 text-ink-secondary dark:text-ink-dark-secondary">清除篩選</a>}
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-6">
+        <h2 className="font-sans text-sm font-semibold text-ink dark:text-ink-dark">{category?.label ?? (tag ? `Tag: ${tag}` : 'All posts')}</h2>
+        <span className="text-xs text-ink-muted">{posts.length} {posts.length === 1 ? 'post' : 'posts'} · Newest first</span>
+        {tag && <a href="/blog" className="text-xs underline underline-offset-4 text-ink-secondary dark:text-ink-dark-secondary">Clear filter</a>}
       </div>
 
       {/* Posts */}
@@ -112,7 +113,7 @@ export default async function BlogIndex({
       {posts.length === 0 && (
         <div className="text-center py-16 rounded-2xl border border-border dark:border-border-dark">
           <p className="text-ink-secondary dark:text-ink-dark-secondary">
-            這個分類目前還沒有文章。
+            No posts in this category yet.
           </p>
         </div>
       )}
