@@ -5,15 +5,29 @@ summary: "我的碩士論文研究不同使用者族群在跨領域序列推薦�
 tags: ["featured", "deep learning", "research"]
 ---
 
-My graduate thesis research was accepted for publication in [IEEE Transactions on Knowledge and Data Engineering (TKDE)](https://ieeexplore.ieee.org/document/11048721), a core computer science journal with a stellar Impact Factor of 9.0. This prestigious journal has been consistently ranked in the top tier (SCI Q1) since 2001.
+我的碩士論文 FairCDSR 做的是跨領域序列推薦。我關注的問題是，不同使用者族群的資料量和行為分布有差異，模型在這些族群上的推薦效果也會有落差。當我們把不同 domain 的資料放在一起學習時，這些差距會怎麼變化？
 
-## Key Results
+研究裡，我從資料擴增、對比學習和興趣轉移三個方向處理這個問題，希望改善推薦效果的同時，也縮小不同族群之間的表現差距。
 
-- Achieved **10% improvement** in recommendation accuracy using Transformer-based cross-domain modeling
-- Reduced **demographic bias by 70%** through novel transfer and contrastive learning techniques
+這個問題和模型拿到的行為資料有關。在研究中，我們發現資料較少的族群，行為序列也比較短、比較單一，模型能從中學到的偏好有限。把多個 domain 的資料放在一起訓練時，原本的差距也可能隨著資訊轉移被放大。
 
-## Overview
+所以在設計方法時，需要一起考慮這些使用者有哪些行為資料，以及模型會怎麼學習這些資料。我們主要做了三個部分：
 
-FairCDSR addresses the challenge of fairness in cross-domain sequential recommendation systems. By combining multi-interest transfer learning with contrastive learning, the model simultaneously improves recommendation accuracy while significantly reducing demographic bias across user groups.
+- **資料擴增**：根據行為序列的上下文產生合適的 item，補進資料較少族群的序列裡，增加模型可以學習的互動資訊與多樣性。
+- **對比學習**：透過替換序列中的 item 建立對比樣本，改善模型對資料較少族群的 representation，讓學到的表示更能反映這些使用者的偏好。
+- **興趣轉移**：在不同 domain 之間轉移興趣資訊時，把族群間的差異納入設計，減少資訊轉移偏向資料較多族群的情況。
 
-[View the publication on IEEE Xplore](https://ieeexplore.ieee.org/document/11048721)
+這幾個部分分別處理輸入資料、模型表示和跨領域資訊轉移。資料擴增提供更多學習訊號，對比學習與興趣轉移則處理模型如何利用這些訊號。
+
+---
+
+在這份研究的實驗中，我們觀察到：
+
+- 推薦準確率提升約 **10%**。
+- 不同族群之間的偏差降低約 **70%**。
+
+回頭看，這次研究讓我對 data bias 有了比較具體的認識。某個族群的推薦效果比較差，可以往前追到它有哪些互動資料、行為序列提供了多少訊號，再看這些訊號經過模型和跨領域轉移後，形成了什麼樣的 representation。這也讓我更在意，模型學到的表示有沒有反映資料較少族群的偏好。
+
+之後再遇到不同族群表現有落差的問題，我想先把資料量、序列長度和互動分布攤開來看，再回到模型設計。我會更仔細地想，這些樣本提供了哪些學習訊號，以及模型學到的表示有沒有把這些訊號保留下來。
+
+這份研究後來獲 **IEEE Transactions on Knowledge and Data Engineering（TKDE）** 接受發表。完整的方法與實驗可以參考[論文](https://ieeexplore.ieee.org/document/11048721)。
