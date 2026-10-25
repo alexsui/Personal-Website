@@ -66,7 +66,7 @@ export default async function HomePage() {
     id: '',
     name: 'Samuel Toh',
     chinese_name: '杜得人',
-    bio: 'I’m a Machine Learning Engineer at momo, building recommendation systems and ads ranking. My work spans candidate retrieval, CTR modeling, A/B testing, and production serving.',
+    bio: 'My background is in recommendation systems research. I later worked on AI agents for legal research and document review. I’m now a Machine Learning Engineer at momo, working on candidate retrieval and ads ranking.\n\nI write about the questions that come up along the way, from how we prepare training data to what a change in model metrics means in practice.\n\nI enjoy capturing natural scenery, street life, and people — finding beauty in everyday moments.',
     photo_url: '/images/profile.jpg',
     email: '',
     social: {},

@@ -28,9 +28,11 @@ export default function Hero({ profile }: Props) {
             </h1>
 
             {/* Bio */}
-            <p className="text-lg text-ink-secondary dark:text-ink-dark-secondary leading-relaxed max-w-lg mb-10">
-              {profile.bio}
-            </p>
+            <div className="space-y-4 text-base sm:text-lg text-ink-secondary dark:text-ink-dark-secondary leading-relaxed max-w-lg mb-10">
+              {profile.bio.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-4">
