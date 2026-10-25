@@ -46,9 +46,9 @@ export default function PostCard({
 
       {/* Topic */}
       {category && (
-        <p className="mt-3 text-xs text-ink-muted dark:text-ink-dark-secondary">
+        <span className="tag mt-3">
           {category.label}
-        </p>
+        </span>
       )}
     </Link>
   );

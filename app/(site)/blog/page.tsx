@@ -93,7 +93,6 @@ export default async function BlogIndex({
 
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-6">
         <h2 className="font-sans text-sm font-semibold text-ink dark:text-ink-dark">{category?.label ?? (tag ? `Tag: ${tag}` : 'All posts')}</h2>
-        <span className="text-xs text-ink-muted">{posts.length} {posts.length === 1 ? 'post' : 'posts'} · Newest first</span>
         {tag && <a href="/blog" className="text-xs underline underline-offset-4 text-ink-secondary dark:text-ink-dark-secondary">Clear filter</a>}
       </div>
 
