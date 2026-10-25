@@ -1,4 +1,5 @@
 import { getPostBySlug, getAllPostSlugs } from '@/lib/db/posts';
+import { getPostCategory } from '@/lib/blog-categories';
 import { getSession } from '@/lib/auth';
 import { mdToHtml } from '@/lib/markdown';
 import Link from 'next/link';
@@ -36,6 +37,7 @@ export default async function PostPage({ params }: Props) {
     );
 
   const html = await mdToHtml(post.content);
+  const category = getPostCategory(post.tags ?? []);
 
   return (
     <div className="container py-16 animate-fade-in">
@@ -83,18 +85,13 @@ export default async function PostPage({ params }: Props) {
             )}
             <EditPostButton post={post} />
           </div>
-          {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag: string) => (
-                <Link
-                  key={tag}
-                  href={`/blog?tag=${encodeURIComponent(tag)}`}
-                  className="tag"
-                >
-                  {tag}
-                </Link>
-              ))}
-            </div>
+          {category && (
+            <Link
+              href={`/blog?category=${category.id}`}
+              className="inline-flex py-1 text-sm text-ink-muted underline underline-offset-4 decoration-border dark:decoration-border-dark hover:text-ink dark:hover:text-ink-dark transition-colors"
+            >
+              {category.label}
+            </Link>
           )}
         </header>
 
