@@ -2,6 +2,13 @@ import { getPublicClient, getAdminClient } from './client';
 import { DbPhoto } from './types';
 import { getPublicUrl } from '@/lib/storage';
 
+export async function getPhotoById(id: string): Promise<DbPhoto | null> {
+  const client = getPublicClient();
+  const { data, error } = await client.from('photos').select('*').eq('id', id).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
 export async function getPhotosByCollection(collectionId: string): Promise<DbPhoto[]> {
   const client = getPublicClient();
   const { data, error } = await client

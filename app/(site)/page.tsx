@@ -2,7 +2,7 @@ import Hero from '@/components/layout/Hero';
 import PreviewList from '@/components/blog/PreviewList';
 import { getPosts } from '@/lib/db/posts';
 import { getCollections } from '@/lib/db/collections';
-import { getPhotosByCollection, getPhotoUrl, getCollectionPhotoCount } from '@/lib/db/photos';
+import { getPhotosByCollection, getPhotoUrl, getCollectionPhotoCount, getPhotoById } from '@/lib/db/photos';
 import { getProfile } from '@/lib/db/profile';
 import { formatCollectionDate } from '@/lib/content';
 import type { Metadata } from 'next';
@@ -14,14 +14,24 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [posts, collections, profile] = await Promise.all([
+  const [posts, collections, profile, selectedPhoto] = await Promise.all([
     getPosts(),
     getCollections(),
     getProfile(),
+    getPhotoById('61855eb8-95e2-43a6-b894-e9fabb402d96'),
   ]);
 
   const latestPosts = posts.slice(0, 2);
-  const previewCollections = collections.slice(0, 2);
+  const selectedCollection = collections.find((collection) => collection.id === selectedPhoto?.collection_id);
+  const featuredPhoto = selectedPhoto && selectedCollection ? {
+    src: getPhotoUrl(selectedPhoto),
+    href: `/projects/${selectedCollection.slug}`,
+    alt: '淡水夕陽下的橋與河面，前景有停泊的小船',
+    title: '淡水的傍晚',
+    caption: '橋、船，還有天色慢慢暗下來的河面。',
+    location: selectedCollection.location,
+  } : undefined;
+  const previewCollections = collections.filter((collection) => collection.id !== selectedCollection?.id).slice(0, 2);
 
   // Resolve cover URLs and photo counts for each collection
   const collectionPreviews = await Promise.all(
@@ -70,7 +80,7 @@ export default async function HomePage() {
       <Hero profile={profile ?? defaultProfile} />
       <div className="h-px bg-border dark:bg-border-dark" />
       <section className="container py-20">
-        <PreviewList posts={latestPosts} collections={collectionPreviews} />
+        <PreviewList posts={latestPosts} collections={collectionPreviews} featuredPhoto={featuredPhoto} />
       </section>
     </>
   );

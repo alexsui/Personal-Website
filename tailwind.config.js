@@ -10,8 +10,8 @@ module.exports = {
       },
       colors: {
         surface: {
-          DEFAULT: '#eae7e1',
-          secondary: '#f2f0ec',
+          DEFAULT: '#f6f4ef',
+          secondary: '#efede7',
           elevated: '#ffffff',
           dark: '#1a1815',
           'dark-secondary': '#242220',
@@ -20,9 +20,13 @@ module.exports = {
         ink: {
           DEFAULT: '#1a1815',
           secondary: '#5c5750',
-          muted: '#908a82',
+          muted: 'rgb(var(--ink-muted-rgb) / <alpha-value>)',
           dark: '#e8e5e0',
           'dark-secondary': '#b5b0a8',
+        },
+        accent: {
+          DEFAULT: '#52624a',
+          dark: '#b8c7ab',
         },
         border: {
           DEFAULT: '#d5d0c9',

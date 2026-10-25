@@ -37,7 +37,7 @@ export default async function AboutPage() {
         <h1 className="text-4xl sm:text-5xl font-display font-medium mb-4 text-ink dark:text-ink-dark">
           About Me
         </h1>
-        <div className="mb-16">
+        <div className="mb-8">
           {profile?.chinese_name && (
             <p className="text-lg text-ink-secondary dark:text-ink-dark-secondary">
               <span lang="zh-Hant">{profile.chinese_name}</span>
@@ -47,34 +47,29 @@ export default async function AboutPage() {
           )}
         </div>
 
-        {/* Interests Section */}
-        <SectionGate show={interests.length > 0}>
-          <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <p className="section-label">Interests</p>
-              <AuthGate>
-                <AddAboutButton type="interest" nextSortOrder={interests.length} />
-              </AuthGate>
+        <div className="space-y-4 text-base leading-relaxed text-ink-secondary dark:text-ink-dark-secondary mb-10 max-w-2xl">
+          <p>
+            My background is in recommendation systems research. I later worked on AI agents
+            for legal research and document review. I’m now a Machine Learning Engineer at momo,
+            working on candidate retrieval and ads ranking.
+          </p>
+          <p>
+            I write about the questions that come up along the way, from how we prepare training
+            data to what a change in model metrics means in practice.
+          </p>
+          {interests.map((interest) => (
+            <div key={interest.id} className="flex items-start gap-2">
+              <p>{(interest.content as { description?: string }).description ?? interest.title}</p>
+              <AuthGate><EditAboutButton section={interest} /></AuthGate>
             </div>
-            {interests.map((interest) => (
-              <div key={interest.id}>
-                <div className="flex items-center gap-2 mb-2">
-                  <h3 className="font-display text-2xl font-medium text-ink dark:text-ink-dark">
-                    {interest.title}
-                  </h3>
-                  <AuthGate>
-                    <EditAboutButton section={interest} />
-                  </AuthGate>
-                </div>
-                {(interest.content as { description?: string }).description && (
-                  <p className="text-sm text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
-                    {(interest.content as { description?: string }).description}
-                  </p>
-                )}
-              </div>
-            ))}
-          </section>
-        </SectionGate>
+          ))}
+          <AuthGate><AddAboutButton type="interest" nextSortOrder={interests.length} /></AuthGate>
+        </div>
+
+        <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm mb-12">
+          <a href="/blog" className="text-accent dark:text-accent-dark underline underline-offset-4 decoration-accent/30">Read my writing</a>
+          <a href="/projects" className="text-accent dark:text-accent-dark underline underline-offset-4 decoration-accent/30">View my photography</a>
+        </div>
 
         <div className="h-px bg-border dark:bg-border-dark mb-16" />
 
@@ -137,7 +132,7 @@ export default async function AboutPage() {
                     </div>
                     {content.bullets && content.bullets.length > 0 && (
                       <ul className="space-y-2">
-                        {content.bullets.map((item, i) => (
+                        {content.bullets.slice(0, 3).map((item, i) => (
                           <li
                             key={i}
                             className="text-sm text-ink-secondary dark:text-ink-dark-secondary pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-px before:bg-ink-muted"
@@ -146,6 +141,19 @@ export default async function AboutPage() {
                           </li>
                         ))}
                       </ul>
+                    )}
+                    {content.bullets && content.bullets.length > 3 && (
+                      <details className="mt-4 group">
+                        <summary className="w-fit cursor-pointer text-sm text-accent dark:text-accent-dark marker:text-accent/60">
+                          <span className="group-open:hidden">More about this role</span>
+                          <span className="hidden group-open:inline">Show less</span>
+                        </summary>
+                        <ul className="space-y-2 mt-3">
+                          {content.bullets.slice(3).map((item, i) => (
+                            <li key={i} className="text-sm text-ink-secondary dark:text-ink-dark-secondary pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-px before:bg-ink-muted">{item}</li>
+                          ))}
+                        </ul>
+                      </details>
                     )}
                   </div>
                 );

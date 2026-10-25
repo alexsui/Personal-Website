@@ -14,9 +14,17 @@ type CollectionPreview = {
 type Props = {
   posts: DbPost[];
   collections: CollectionPreview[];
+  featuredPhoto?: {
+    src: string;
+    href: string;
+    alt: string;
+    title: string;
+    caption: string;
+    location: string;
+  };
 };
 
-export default function PreviewList({ posts, collections }: Props) {
+export default function PreviewList({ posts, collections, featuredPhoto }: Props) {
   return (
     <div className="space-y-20">
       {/* Latest Posts */}
@@ -55,12 +63,12 @@ export default function PreviewList({ posts, collections }: Props) {
       )}
 
       {/* Gallery Preview */}
-      {collections.length > 0 && (
+      {(featuredPhoto || collections.length > 0) && (
         <>
           {posts.length > 0 && (
             <div className="h-px bg-border dark:bg-border-dark" />
           )}
-          <div>
+          <section aria-label="Photography" id="photography" className="scroll-mt-24">
             <div className="flex items-center justify-between mb-8">
               <p className="section-label">Photography</p>
               <Link
@@ -70,12 +78,34 @@ export default function PreviewList({ posts, collections }: Props) {
                 View gallery
               </Link>
             </div>
-            <div className="space-y-0 divide-y divide-border dark:divide-border-dark">
+            {featuredPhoto && (
+              <figure className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-8 md:gap-16 items-center mb-12">
+                <Link href={featuredPhoto.href} className="block w-full max-w-sm mx-auto md:mx-0 rounded-xl overflow-hidden focus-ring">
+                  <Image
+                    src={featuredPhoto.src}
+                    alt={featuredPhoto.alt}
+                    width={2080}
+                    height={3120}
+                    sizes="(min-width: 768px) 384px, (min-width: 432px) 384px, calc(100vw - 48px)"
+                    className="w-full h-auto"
+                  />
+                </Link>
+                <figcaption className="max-w-sm">
+                  <p className="section-label mb-4">{featuredPhoto.location}</p>
+                  <h3 className="font-display text-3xl sm:text-4xl font-medium leading-snug text-ink dark:text-ink-dark mb-4">{featuredPhoto.title}</h3>
+                  <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed mb-8">{featuredPhoto.caption}</p>
+                  <Link href={featuredPhoto.href} className="inline-flex items-center gap-2 text-sm text-accent dark:text-accent-dark underline underline-offset-4 decoration-accent/30">
+                    看淡水相簿 <span aria-hidden="true">→</span>
+                  </Link>
+                </figcaption>
+              </figure>
+            )}
+            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-x-10 ${featuredPhoto ? 'border-t border-border dark:border-border-dark pt-6' : ''}`}>
               {collections.map((c) => (
                 <Link
                   key={c.slug}
                   href={`/projects/${c.slug}`}
-                  className="group flex items-center gap-5 py-6 first:pt-0 last:pb-0"
+                  className="group flex items-center gap-4 py-4"
                 >
                   <div className="overflow-hidden rounded-lg shrink-0">
                     <Image
@@ -83,7 +113,7 @@ export default function PreviewList({ posts, collections }: Props) {
                       alt={c.title}
                       width={200}
                       height={200}
-                      className="w-20 h-20 object-cover group-hover:opacity-80 transition-opacity duration-300"
+                      className="w-16 h-16 object-cover group-hover:opacity-80 transition-opacity duration-300"
                     />
                   </div>
                   <div>
@@ -97,7 +127,7 @@ export default function PreviewList({ posts, collections }: Props) {
                 </Link>
               ))}
             </div>
-          </div>
+          </section>
         </>
       )}
     </div>

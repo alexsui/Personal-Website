@@ -9,12 +9,13 @@
    ============================================ */
 
 :root {
-  --surface: #eae7e1;
-  --surface-secondary: #f2f0ec;
+  --surface: #f6f4ef;
+  --surface-secondary: #efede7;
   --surface-elevated: #ffffff;
   --ink: #1a1815;
   --ink-secondary: #5c5750;
-  --ink-muted: #908a82;
+  --ink-muted: #756f66;
+  --ink-muted-rgb: 117 111 102;
   --border: #d5d0c9;
 }
 
@@ -24,7 +25,8 @@
   --surface-elevated: #2e2c29;
   --ink: #e8e5e0;
   --ink-secondary: #b5b0a8;
-  --ink-muted: #7a756e;
+  --ink-muted: #a39d93;
+  --ink-muted-rgb: 163 157 147;
   --border: #3a3835;
 }
 
