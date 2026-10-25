@@ -1,6 +1,6 @@
 import PostCard from '@/components/blog/PostCard';
 import { getPosts } from '@/lib/db/posts';
-import { blogCategories, getPostCategory } from '@/lib/blog-categories';
+import { blogCategories, getBlogCategory, getPostCategory } from '@/lib/blog-categories';
 import Link from 'next/link';
 import { getSession } from '@/lib/auth';
 import AuthGate from '@/components/admin/AuthGate';
@@ -14,7 +14,7 @@ export default async function BlogIndex({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const category = blogCategories.find((item) => item.id === searchParams.category);
+  const category = getBlogCategory(searchParams.category);
   // Keep existing links from article tags working.
   const tag = !category && typeof searchParams.tag === 'string'
     ? searchParams.tag.toLowerCase()
@@ -38,7 +38,7 @@ export default async function BlogIndex({
           Blog
         </h1>
         <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
-          記錄推薦系統、工程實作，以及工作中慢慢想清楚的事情。
+          記錄推薦系統、資料工程與產品開發中，慢慢想清楚的事情。
         </p>
         <AuthGate>
           <div className="mt-4">
@@ -47,27 +47,28 @@ export default async function BlogIndex({
         </AuthGate>
       </div>
 
-      <nav aria-label="文章分類" className="mb-10 flex flex-wrap gap-2 items-center">
-        <Link
+      <nav aria-label="文章分類" className="mb-10 flex flex-wrap gap-x-2 sm:gap-x-7 gap-y-1 items-center border-b border-border dark:border-border-dark">
+        {/* Use a document navigation when clearing query filters to avoid stale router results. */}
+        <a
           href="/blog"
           aria-current={!category && !tag ? 'page' : undefined}
-          className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-all duration-200 ${
+          className={`-mb-px py-3 text-sm border-b transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current ${
             !category && !tag
-              ? 'bg-accent dark:bg-accent-dark text-white dark:text-surface-dark border-accent dark:border-accent-dark'
-              : 'text-ink-muted border-border dark:border-border-dark hover:text-ink dark:hover:text-ink-dark hover:border-ink/30 dark:hover:border-ink-dark/30'
+              ? 'font-medium text-ink dark:text-ink-dark border-ink dark:border-ink-dark'
+              : 'text-ink-muted border-transparent hover:text-ink dark:hover:text-ink-dark hover:border-ink/30 dark:hover:border-ink-dark/30'
           }`}
         >
           全部
-        </Link>
+        </a>
         {blogCategories.map((item) => (
           <Link
             key={item.id}
             href={`/blog?category=${item.id}`}
             aria-current={category?.id === item.id ? 'page' : undefined}
-            className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-all duration-200 ${
+            className={`-mb-px py-3 text-sm border-b transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current ${
               category?.id === item.id
-                ? 'bg-accent dark:bg-accent-dark text-white dark:text-surface-dark border-accent dark:border-accent-dark'
-                : 'text-ink-muted border-border dark:border-border-dark hover:text-ink dark:hover:text-ink-dark hover:border-ink/30 dark:hover:border-ink-dark/30'
+                ? 'font-medium text-ink dark:text-ink-dark border-ink dark:border-ink-dark'
+                : 'text-ink-muted border-transparent hover:text-ink dark:hover:text-ink-dark hover:border-ink/30 dark:hover:border-ink-dark/30'
             }`}
           >
             {item.label}
@@ -76,12 +77,12 @@ export default async function BlogIndex({
       </nav>
 
       {!category && !tag && featured.length > 0 && (
-        <section aria-label="精選研究" className="mb-12 border-l-2 border-accent/50 dark:border-accent-dark/50 pl-5">
-          <h2 className="font-sans text-xs font-semibold tracking-wide text-accent dark:text-accent-dark mb-3">精選研究</h2>
+        <section aria-label="精選研究" className="mb-12 border-l border-border dark:border-border-dark pl-5">
+          <h2 className="font-sans text-xs font-medium tracking-wide text-ink-muted mb-3">精選研究</h2>
           <div className="space-y-4">
             {featured.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
-                <h3 className="font-display text-xl sm:text-2xl text-ink dark:text-ink-dark group-hover:text-accent dark:group-hover:text-accent-dark transition-colors">{post.title}</h3>
+                <h3 className="font-display text-xl sm:text-2xl text-ink dark:text-ink-dark group-hover:underline underline-offset-4 decoration-border dark:decoration-border-dark">{post.title}</h3>
                 <p className="mt-1 text-xs text-ink-muted">{new Date(post.date).getUTCFullYear()} · {getPostCategory(post.tags ?? [])?.label ?? 'Research'}</p>
               </Link>
             ))}
@@ -92,7 +93,7 @@ export default async function BlogIndex({
       <div className="flex items-baseline gap-3 mb-6">
         <h2 className="font-sans text-sm font-semibold text-ink dark:text-ink-dark">{category?.label ?? (tag ? `標籤：${tag}` : '所有文章')}</h2>
         <span className="text-xs text-ink-muted">{posts.length} 篇 · 由新到舊</span>
-        {tag && <Link href="/blog" className="text-xs underline underline-offset-4 text-accent dark:text-accent-dark">清除篩選</Link>}
+        {tag && <a href="/blog" className="text-xs underline underline-offset-4 text-ink-secondary dark:text-ink-dark-secondary">清除篩選</a>}
       </div>
 
       {/* Posts */}

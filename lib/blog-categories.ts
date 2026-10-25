@@ -1,19 +1,32 @@
 export const blogCategories = [
-  { id: 'ml', label: '推薦與 ML' },
-  { id: 'engineering', label: '工程實作' },
-  { id: 'reflection', label: '工作心得' },
+  { id: 'recommendation', label: '推薦系統' },
+  { id: 'data-engineering', label: '資料工程' },
+  { id: 'product', label: '產品開發' },
 ] as const;
 
 export type BlogCategory = (typeof blogCategories)[number];
 
+const legacyCategoryIds: Record<string, BlogCategory['id']> = {
+  ml: 'recommendation',
+  engineering: 'data-engineering',
+  reflection: 'product',
+};
+
+export function getBlogCategory(id: string | string[] | undefined): BlogCategory | undefined {
+  if (typeof id !== 'string') return undefined;
+  return blogCategories.find((category) => category.id === (legacyCategoryIds[id] ?? id));
+}
+
 export function getPostCategory(tags: string[]): BlogCategory | undefined {
-  if (tags.some((tag) => ['machine-learning', 'deep learning', 'recommendation system', 'research'].includes(tag))) {
+  const normalizedTags = tags.map((tag) => tag.trim().toLowerCase());
+  // Classify by subject. Broad tags such as reflection or research are not subjects.
+  if (normalizedTags.includes('recommendation system')) {
     return blogCategories[0];
   }
-  if (tags.some((tag) => ['engineering', 'data-pipeline'].includes(tag))) {
+  if (normalizedTags.some((tag) => ['data-pipeline', 'data-engineering'].includes(tag))) {
     return blogCategories[1];
   }
-  if (tags.some((tag) => ['reflection', 'product'].includes(tag))) {
+  if (normalizedTags.includes('product')) {
     return blogCategories[2];
   }
   return undefined;
