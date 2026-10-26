@@ -7,8 +7,14 @@ import { getSession } from '@/lib/auth';
 import AuthGate from '@/components/admin/AuthGate';
 import NewPostButton from '@/components/admin/NewPostButton';
 import EditPostButton from '@/components/admin/EditPostButton';
+import { createPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
+export const metadata = createPageMetadata({
+  title: 'Blog',
+  description: 'Notes by Samuel Toh on recommendation systems, data engineering, product development, and what he learns along the way. Written mostly in Traditional Chinese.',
+  path: '/blog',
+});
 
 export default async function BlogIndex({
   searchParams = {},

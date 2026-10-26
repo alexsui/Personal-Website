@@ -5,6 +5,8 @@ import { getSession } from '@/lib/auth';
 import { mdToHtml } from '@/lib/markdown';
 import Link from 'next/link';
 import EditPostButton from '@/components/admin/EditPostButton';
+import { createPageMetadata } from '@/lib/seo';
+import type { Metadata } from 'next';
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -15,6 +17,20 @@ export async function generateStaticParams() {
 }
 
 type Props = { params: { slug: string } };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const post = await getPostBySlug(params.slug);
+  if (!post) return { title: 'Post not found', robots: { index: false, follow: false } };
+
+  return createPageMetadata({
+    title: post.title,
+    description: post.summary,
+    path: `/blog/${post.slug}`,
+    image: post.cover_url ?? undefined,
+    locale: getPostLanguage(post.content).code === 'zh-Hant' ? 'zh_TW' : 'en_US',
+    article: { publishedTime: post.date, modifiedTime: post.updated_at },
+  });
+}
 
 export default async function PostPage({ params }: Props) {
   const session = await getSession();

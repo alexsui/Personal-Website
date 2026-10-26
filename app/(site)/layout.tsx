@@ -11,9 +11,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const profile = await getProfile().catch(() => null);
   const englishName = profile?.name ?? 'Samuel Toh';
   const chineseName = profile?.chinese_name ?? '杜得人';
-  const bio = profile?.bio ?? 'Machine Learning Engineer at momo, working on recommendation systems, candidate retrieval, and ads ranking.';
   const title = `${englishName} · ${chineseName} — Personal Website`;
-  const description = `Personal website of ${englishName} (${chineseName}). ${bio}`;
+  const description = `${englishName} (${chineseName}) — machine learning engineer. Notes on work and learning, alongside photography from everyday life and travels.`;
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -21,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     keywords: [englishName, chineseName, 'Samuel Toh', '杜得人', 'portfolio', 'blog', 'AI'],
     openGraph: {
-      type: 'profile',
+      type: 'website',
       url: SITE_URL,
       title,
       description,

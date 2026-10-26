@@ -1,14 +1,19 @@
 import { getAboutSections } from '@/lib/db/about';
 import { getProfile } from '@/lib/db/profile';
 import { DbAboutSection } from '@/lib/db/types';
-import Button from '@/components/ui/Button';
 import AuthGate from '@/components/admin/AuthGate';
 import EditAboutButton from '@/components/admin/EditAboutButton';
 import AddAboutButton from '@/components/admin/AddAboutButton';
 import SectionGate from '@/components/admin/SectionGate';
 import Image from 'next/image';
+import { createPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
+export const metadata = createPageMetadata({
+  title: 'About',
+  description: 'Samuel Toh’s experience in recommendation systems, AI agents, and advertising, alongside education, research, and technical skills.',
+  path: '/about',
+});
 
 function groupByType(sections: DbAboutSection[]): Record<string, DbAboutSection[]> {
   return sections.reduce((acc, s) => {
@@ -22,7 +27,6 @@ export default async function AboutPage() {
   const [sections, profile] = await Promise.all([getAboutSections(), getProfile()]);
   const grouped = groupByType(sections);
 
-  const interests = grouped['interest'] ?? [];
   const experiences = grouped['experience'] ?? [];
   const educations = grouped['education'] ?? [];
   const publications = grouped['publication'] ?? [];
@@ -47,23 +51,9 @@ export default async function AboutPage() {
           )}
         </div>
 
-        <div className="space-y-4 text-base leading-relaxed text-ink-secondary dark:text-ink-dark-secondary mb-10 max-w-2xl">
-          <p>
-            My background is in recommendation systems research. I later worked on AI agents
-            for legal research and document review. I’m now a Machine Learning Engineer at momo,
-            working on candidate retrieval and ads ranking.
-          </p>
-          <p>
-            I write about what I’m working on, what I’m learning, and the questions I’m still figuring out.
-          </p>
-          {interests.map((interest) => (
-            <div key={interest.id} className="flex items-start gap-2">
-              <p>{(interest.content as { description?: string }).description ?? interest.title}</p>
-              <AuthGate><EditAboutButton section={interest} /></AuthGate>
-            </div>
-          ))}
-          <AuthGate><AddAboutButton type="interest" nextSortOrder={interests.length} /></AuthGate>
-        </div>
+        <p className="text-base leading-relaxed text-ink-secondary dark:text-ink-dark-secondary mb-8 max-w-2xl">
+          My experience spans recommendation research, AI agents, and advertising systems.
+        </p>
 
         <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm mb-12">
           <a href="/blog" className="text-accent dark:text-accent-dark underline underline-offset-4 decoration-accent/30">Read my writing</a>
@@ -350,23 +340,6 @@ export default async function AboutPage() {
           </section>
         </SectionGate>
 
-        {/* Resume Download */}
-        <Button href="/resume.pdf" className="gap-2">
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            />
-          </svg>
-          Download Resume
-        </Button>
       </div>
     </div>
   );

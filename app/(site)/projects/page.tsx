@@ -4,8 +4,14 @@ import { formatCollectionDate } from '@/lib/content';
 import GalleryTabs from '@/components/ui/GalleryTabs';
 import AuthGate from '@/components/admin/AuthGate';
 import NewCollectionButton from '@/components/admin/NewCollectionButton';
+import { createPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
+export const metadata = createPageMetadata({
+  title: 'Photography',
+  description: 'Photo albums and individual frames from Samuel Toh’s travels and everyday life.',
+  path: '/projects',
+});
 
 export default async function GalleryPage() {
   const dbCollections = await getCollections();
@@ -49,7 +55,7 @@ export default async function GalleryPage() {
           Photography
         </h1>
         <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
-          Capturing natural scenery, street life, and people — finding beauty in everyday moments.
+          Photo albums from my travels, and individual frames from everyday life.
         </p>
       </div>
 

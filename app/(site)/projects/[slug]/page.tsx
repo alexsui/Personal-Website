@@ -6,11 +6,27 @@ import DeletablePhoto from '@/components/admin/DeletablePhoto';
 import AuthGate from '@/components/admin/AuthGate';
 import EditCollectionButton from '@/components/admin/EditCollectionButton';
 import PhotoUploader from '@/components/admin/PhotoUploader';
+import { createPageMetadata } from '@/lib/seo';
+import type { Metadata } from 'next';
 
 export const revalidate = 60;
 export const dynamicParams = true;
 
 type Props = { params: { slug: string } };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const collection = await getCollectionBySlug(params.slug);
+  if (!collection) return { title: 'Album not found', robots: { index: false, follow: false } };
+
+  const photos = await getPhotosByCollection(collection.id);
+  const cover = photos.find((photo) => photo.id === collection.cover_photo_id) ?? photos[0];
+  return createPageMetadata({
+    title: `${collection.title} — Photography`,
+    description: collection.description || `Photographs from ${collection.location} by Samuel Toh.`,
+    path: `/projects/${collection.slug}`,
+    image: cover ? getPhotoUrl(cover) : undefined,
+  });
+}
 
 export default async function CollectionPage({ params }: Props) {
   const collection = await getCollectionBySlug(params.slug);
