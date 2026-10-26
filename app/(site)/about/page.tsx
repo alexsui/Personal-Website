@@ -54,8 +54,7 @@ export default async function AboutPage() {
             working on candidate retrieval and ads ranking.
           </p>
           <p>
-            I write about the questions that come up along the way, from how we prepare training
-            data to what a change in model metrics means in practice.
+            I write about what I’m working on, what I’m learning, and the questions I’m still figuring out.
           </p>
           {interests.map((interest) => (
             <div key={interest.id} className="flex items-start gap-2">
