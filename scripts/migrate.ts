@@ -10,6 +10,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { createClient } from '@supabase/supabase-js';
+import { profile as defaultProfile } from '../lib/profile';
 
 // Load .env.local
 dotenv.config({ path: path.resolve(__dirname, '..', '.env.local') });
@@ -331,7 +332,7 @@ async function migrateProfile() {
       name: 'Samuel Toh',
       bio: 'Dedicated to building AI products that make life easier.',
       photo_url: publicUrl,
-      email: 'alexsui122@gmail.com',
+      email: defaultProfile.recipientEmail,
       social: {
         github: 'https://github.com/alexsui',
         linkedin:

@@ -82,8 +82,8 @@ export default function ProfileEditor({ profile, onClose }: Props) {
       </div>
 
       <div>
-        <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Email</label>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="input w-full" />
+        <label htmlFor="profile-contact-email" className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">Public contact email</label>
+        <input id="profile-contact-email" type="email" value={email} onChange={e => setEmail(e.target.value)} className="input w-full" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">

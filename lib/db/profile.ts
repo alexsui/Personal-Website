@@ -6,7 +6,7 @@ export const getProfile = cache(async (): Promise<DbProfile | null> => {
   const client = getPublicClient();
   const { data, error } = await client
     .from('profile')
-    .select('*')
+    .select('id, name, chinese_name, bio, photo_url, email, social, cta, highlights, updated_at')
     .limit(1)
     .single();
 
