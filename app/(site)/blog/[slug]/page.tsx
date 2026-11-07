@@ -18,10 +18,11 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
   if (!post) return { title: 'Post not found', robots: { index: false, follow: false } };
 
   return createPageMetadata({
@@ -38,7 +39,8 @@ export default async function PostPage({ params }: Props) {
   const session = await getSession();
   const includeDrafts = !!session;
 
-  const post = await getPostBySlug(params.slug, includeDrafts);
+  const { slug } = await params;
+  const post = await getPostBySlug(slug, includeDrafts);
 
   if (!post)
     return (

@@ -1,8 +1,15 @@
 import { getPublicClient, getAdminClient } from './client';
 import { DbPost } from './types';
+import { requireAuth } from '@/lib/auth';
+
+async function getPostReader(includeDrafts: boolean) {
+  if (!includeDrafts) return getPublicClient();
+  await requireAuth();
+  return getAdminClient();
+}
 
 export async function getPosts(includeDrafts = false): Promise<DbPost[]> {
-  const client = getPublicClient();
+  const client = await getPostReader(includeDrafts);
   let query = client
     .from('posts')
     .select('*')
@@ -18,7 +25,7 @@ export async function getPosts(includeDrafts = false): Promise<DbPost[]> {
 }
 
 export async function getPostBySlug(slug: string, includeDrafts = false): Promise<DbPost | null> {
-  const client = getPublicClient();
+  const client = await getPostReader(includeDrafts);
   let query = client
     .from('posts')
     .select('*')

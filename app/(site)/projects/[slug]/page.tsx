@@ -12,10 +12,11 @@ import type { Metadata } from 'next';
 export const revalidate = 60;
 export const dynamicParams = true;
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const collection = await getCollectionBySlug(params.slug);
+  const { slug } = await params;
+  const collection = await getCollectionBySlug(slug);
   if (!collection) return { title: 'Album not found', robots: { index: false, follow: false } };
 
   const photos = await getPhotosByCollection(collection.id);
@@ -29,7 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CollectionPage({ params }: Props) {
-  const collection = await getCollectionBySlug(params.slug);
+  const { slug } = await params;
+  const collection = await getCollectionBySlug(slug);
 
   if (!collection)
     return (

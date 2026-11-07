@@ -17,14 +17,15 @@ export const metadata = createPageMetadata({
 });
 
 export default async function BlogIndex({
-  searchParams = {},
+  searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const category = getBlogCategory(searchParams.category);
+  const filters = await searchParams;
+  const category = getBlogCategory(filters.category);
   // Keep existing links from article tags working.
-  const tag = !category && typeof searchParams.tag === 'string'
-    ? searchParams.tag.toLowerCase()
+  const tag = !category && typeof filters.tag === 'string'
+    ? filters.tag.toLowerCase()
     : undefined;
 
   const session = await getSession();
