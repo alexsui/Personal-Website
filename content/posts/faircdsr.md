@@ -17,6 +17,10 @@ tags: ["featured", "deep learning", "research"]
 - **對比學習**：透過替換序列中的 item 建立對比樣本，改善模型對資料較少族群的 representation，讓學到的表示更能反映這些使用者的偏好。
 - **興趣轉移**：在不同 domain 之間轉移興趣資訊時，把族群間的差異納入設計，減少資訊轉移偏向資料較多族群的情況。
 
+[![FairCDSR 系統架構：左下方的產生器擴增行為序列，右下方透過對比學習建立使用者表示，右上方在不同領域間轉移興趣。](/images/blog/faircdsr/system-overview.png)](/images/blog/faircdsr/system-overview.png)
+
+*圖 4.1｜FairCDSR 系統架構（碩士論文，第 20 頁）。點圖可看原始大小。*
+
 這幾個部分分別處理輸入資料、模型表示和跨領域資訊轉移。資料擴增提供更多學習訊號，對比學習與興趣轉移則處理模型如何利用這些訊號。
 
 ---
