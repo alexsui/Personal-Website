@@ -3,7 +3,8 @@ import ClientLayout from '@/components/providers/ClientLayout';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { getProfile } from '@/lib/db/profile';
-import { SITE_URL } from '@/lib/seo';
+import { SITE_URL, PROFESSIONAL_FOCUS, createPersonStructuredData } from '@/lib/seo';
+import StructuredData from '@/components/StructuredData';
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 
@@ -11,14 +12,13 @@ export async function generateMetadata(): Promise<Metadata> {
   const profile = await getProfile().catch(() => null);
   const englishName = profile?.name ?? 'Samuel Toh';
   const chineseName = profile?.chinese_name ?? '杜得人';
-  const title = `${englishName} · ${chineseName} — Personal Website`;
-  const description = `${englishName} (${chineseName}) — machine learning engineer. Notes on work and learning, alongside photography from everyday life and travels.`;
+  const title = `${englishName} ${chineseName} | ${PROFESSIONAL_FOCUS}`;
+  const description = `${englishName} (${chineseName}), Machine Learning Engineer working on recommendation systems and AI agents. Notes on ads ranking, retrieval, RAG, and LLM evaluation.`;
 
   return {
     metadataBase: new URL(SITE_URL),
     title,
     description,
-    keywords: [englishName, chineseName, 'Samuel Toh', '杜得人', 'portfolio', 'blog', 'AI'],
     openGraph: {
       type: 'website',
       url: SITE_URL,
@@ -40,16 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const profile = await getProfile().catch(() => null);
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: profile?.name ?? 'Samuel Toh',
-    alternateName: profile?.chinese_name ?? '杜得人',
-    url: SITE_URL,
-    image: `${SITE_URL}/images/profile.jpg`,
-    sameAs: [profile?.social?.github, profile?.social?.linkedin].filter(Boolean) as string[],
-  };
-  const jsonLdString = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
+  const jsonLd = { '@context': 'https://schema.org', ...createPersonStructuredData(profile) };
 
   return (
     <html lang="en">
@@ -59,7 +50,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <main className="flex-1 container py-8">{children}</main>
           <Footer />
         </ClientLayout>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString }} />
+        <StructuredData data={jsonLd} />
       </body>
     </html>
   );

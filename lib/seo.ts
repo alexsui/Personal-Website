@@ -1,6 +1,23 @@
 import type { Metadata } from 'next';
+import type { DbProfile } from '@/lib/db/types';
 
 export const SITE_URL = 'https://samueltoh.dev';
+export const PROFESSIONAL_FOCUS = 'Recommendation Systems & AI Agents';
+export const PERSON_ID = `${SITE_URL}/about#person`;
+
+export function createPersonStructuredData(profile: DbProfile | null) {
+  return {
+    '@type': 'Person',
+    '@id': PERSON_ID,
+    name: profile?.name ?? 'Samuel Toh',
+    alternateName: profile?.chinese_name ?? '杜得人',
+    url: `${SITE_URL}/about`,
+    image: new URL(profile?.photo_url ?? '/images/profile.jpg', SITE_URL).toString(),
+    jobTitle: 'Machine Learning Engineer',
+    knowsAbout: ['Recommendation systems', 'Ads ranking', 'AI agents', 'Retrieval-augmented generation', 'LLM evaluation'],
+    sameAs: [profile?.social?.github, profile?.social?.linkedin].filter(Boolean) as string[],
+  };
+}
 
 export function pageTitle(base: string, suffix = 'Samuel Toh') {
   return `${base} · ${suffix}`;

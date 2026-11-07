@@ -11,8 +11,8 @@ import { createPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
 export const metadata = createPageMetadata({
-  title: 'Blog',
-  description: 'Notes by Samuel Toh on recommendation systems, data engineering, product development, and what he learns along the way. Written mostly in Traditional Chinese.',
+  title: 'Blog — Recommendation Systems & AI Agents',
+  description: 'Engineering notes by Samuel Toh (杜得人) on recommendation systems, AI agents, ads ranking, and data engineering. Written mostly in Traditional Chinese.',
   path: '/blog',
 });
 
@@ -45,7 +45,7 @@ export default async function BlogIndex({
           Blog
         </h1>
         <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
-          Notes from work, written mostly in Traditional Chinese.
+          Notes on recommendation systems, AI agents, and the engineering behind them. Written mostly in Traditional Chinese.
         </p>
         <AuthGate>
           <div className="mt-4">

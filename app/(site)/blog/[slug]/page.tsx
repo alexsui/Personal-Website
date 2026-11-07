@@ -5,7 +5,9 @@ import { getSession } from '@/lib/auth';
 import { mdToHtml } from '@/lib/markdown';
 import Link from 'next/link';
 import EditPostButton from '@/components/admin/EditPostButton';
-import { createPageMetadata } from '@/lib/seo';
+import { createPageMetadata, createPersonStructuredData, SITE_URL } from '@/lib/seo';
+import { getProfile } from '@/lib/db/profile';
+import StructuredData from '@/components/StructuredData';
 import type { Metadata } from 'next';
 
 export const revalidate = 60;
@@ -54,11 +56,27 @@ export default async function PostPage({ params }: Props) {
     );
 
   const language = getPostLanguage(post.content);
-  const html = await mdToHtml(post.content);
+  const [html, profile] = await Promise.all([mdToHtml(post.content), getProfile().catch(() => null)]);
   const category = getPostCategory(post.tags ?? []);
+  const url = `${SITE_URL}/blog/${post.slug}`;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `${url}#article`,
+    url,
+    mainEntityOfPage: url,
+    headline: post.title,
+    description: post.summary,
+    datePublished: post.date,
+    dateModified: post.updated_at,
+    inLanguage: language.code,
+    author: createPersonStructuredData(profile),
+    ...(post.cover_url ? { image: new URL(post.cover_url, SITE_URL).toString() } : {}),
+  };
 
   return (
     <div className="container py-16 animate-fade-in">
+      {!post.draft && <StructuredData data={jsonLd} />}
       <article className="max-w-3xl mx-auto">
         {/* Back link */}
         <Link
@@ -91,6 +109,9 @@ export default async function PostPage({ params }: Props) {
                 day: 'numeric',
               })}
             </time>
+            <span className="text-sm text-ink-muted">
+              By <Link href="/about" rel="author" className="underline underline-offset-4">{profile?.name ?? 'Samuel Toh'}</Link>
+            </span>
           </p>
           <div className="flex items-start gap-3">
             <h1 lang={getPostLanguage(post.title).code} className="text-3xl sm:text-4xl lg:text-5xl font-display font-medium text-ink dark:text-ink-dark mb-5 leading-[1.1]">

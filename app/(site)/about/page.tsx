@@ -6,12 +6,13 @@ import EditAboutButton from '@/components/admin/EditAboutButton';
 import AddAboutButton from '@/components/admin/AddAboutButton';
 import SectionGate from '@/components/admin/SectionGate';
 import Image from 'next/image';
-import { createPageMetadata } from '@/lib/seo';
+import { createPageMetadata, createPersonStructuredData, SITE_URL } from '@/lib/seo';
+import StructuredData from '@/components/StructuredData';
 
 export const revalidate = 60;
 export const metadata = createPageMetadata({
-  title: 'About',
-  description: 'Samuel Toh’s experience in recommendation systems, AI agents, and advertising, alongside education, research, and technical skills.',
+  title: 'About — Recommendation Systems & AI Agents',
+  description: 'Samuel Toh (杜得人), Machine Learning Engineer. Experience in recommendation systems, ads ranking, production AI agents, RAG, and LLM evaluation.',
   path: '/about',
 });
 
@@ -32,9 +33,17 @@ export default async function AboutPage() {
   const publications = grouped['publication'] ?? [];
   const achievements = grouped['achievement'] ?? [];
   const skillGroups = grouped['skill_group'] ?? [];
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    '@id': `${SITE_URL}/about#profile`,
+    url: `${SITE_URL}/about`,
+    mainEntity: createPersonStructuredData(profile),
+  };
 
   return (
     <div className="container py-16 animate-fade-in">
+      <StructuredData data={jsonLd} />
       <div className="max-w-3xl">
         {/* Page Header */}
         <p className="section-label mb-4">About</p>
@@ -51,9 +60,22 @@ export default async function AboutPage() {
           )}
         </div>
 
-        <p className="text-base leading-relaxed text-ink-secondary dark:text-ink-dark-secondary mb-8 max-w-2xl">
-          My experience spans recommendation research, AI agents, and advertising systems.
-        </p>
+        <div className="space-y-4 text-base leading-relaxed text-ink-secondary dark:text-ink-dark-secondary mb-8 max-w-2xl">
+          <p>
+            I’m a Machine Learning Engineer working across recommendation systems and AI agents.
+            At momo, I work on candidate retrieval and ads ranking. My research on fairness in
+            cross-domain sequential recommendation was published in IEEE TKDE.
+          </p>
+          <p>
+            Previously at Tenfold AI, I built production AI agents for legal research and document
+            review, including retrieval-augmented generation (RAG), multi-turn conversations, and
+            LLM evaluation. I write about the engineering decisions and lessons behind this work.
+          </p>
+          <p lang="zh-Hant">
+            我是杜得人（Samuel Toh），機器學習工程師，專注於推薦系統與 AI Agent。
+            工作涵蓋候選召回、廣告排序，以及法律研究與文件審查的 AI Agent、RAG 和 LLM 評估。
+          </p>
+        </div>
 
         <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm mb-12">
           <a href="/blog" className="text-accent dark:text-accent-dark underline underline-offset-4 decoration-accent/30">Read my writing</a>

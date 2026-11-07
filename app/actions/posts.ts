@@ -26,6 +26,7 @@ export async function createPostAction(formData: {
     draft: true,
   });
   revalidatePath('/blog');
+  revalidatePath('/sitemap.xml');
   revalidatePath('/');
   return post;
 }
@@ -49,6 +50,7 @@ export async function updatePostAction(
   }
   const post = await updatePost(id, updates);
   revalidatePath('/blog');
+  revalidatePath('/sitemap.xml');
   revalidatePath(`/blog/${post.slug}`);
   revalidatePath('/');
   return post;
@@ -58,6 +60,7 @@ export async function deletePostAction(id: string, slug: string) {
   await requireAuth();
   await deletePost(id);
   revalidatePath('/blog');
+  revalidatePath('/sitemap.xml');
   revalidatePath(`/blog/${slug}`);
   revalidatePath('/');
 }
@@ -66,6 +69,7 @@ export async function toggleDraftAction(id: string, slug: string, draft: boolean
   await requireAuth();
   await updatePost(id, { draft });
   revalidatePath('/blog');
+  revalidatePath('/sitemap.xml');
   revalidatePath(`/blog/${slug}`);
   revalidatePath('/');
 }

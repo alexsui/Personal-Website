@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { DbProfile } from '@/lib/db/types';
 import AuthGate from '@/components/admin/AuthGate';
 import EditProfileButton from '@/components/admin/EditProfileButton';
+import { PROFESSIONAL_FOCUS } from '@/lib/seo';
 
 type Props = { profile: DbProfile };
 
@@ -26,6 +27,10 @@ export default function Hero({ profile }: Props) {
               Hi, I&apos;m{' '}
               <span className="italic">{profile.name.split(' ')[0]}</span>
             </h1>
+
+            <p className="text-base sm:text-lg font-medium text-ink dark:text-ink-dark mb-5">
+              Machine Learning Engineer · {PROFESSIONAL_FOCUS}
+            </p>
 
             {/* Bio */}
             <div className="space-y-4 text-base sm:text-lg text-ink-secondary dark:text-ink-dark-secondary leading-relaxed max-w-lg lg:max-w-2xl mb-10">
