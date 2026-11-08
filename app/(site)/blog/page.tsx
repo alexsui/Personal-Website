@@ -107,7 +107,7 @@ export default async function BlogIndex({
         {posts.map((p) => (
           <div key={p.slug} className="py-8 first:pt-0 last:pb-0 flex items-start gap-3">
             <div className="flex-1 min-w-0">
-              <PostCard post={p} activeCategory={category} activeTag={tag} />
+              <PostCard post={p} />
             </div>
             <EditPostButton post={p} />
           </div>

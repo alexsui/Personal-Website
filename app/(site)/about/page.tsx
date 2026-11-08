@@ -24,6 +24,14 @@ function groupByType(sections: DbAboutSection[]): Record<string, DbAboutSection[
   }, {} as Record<string, DbAboutSection[]>);
 }
 
+function ResumeText({ text }: { text: string }) {
+  return text.split(/\*\*([^*\n]+)\*\*/g).map((part, index) =>
+    index % 2 === 0 ? part : (
+      <strong key={index} className="font-semibold text-ink dark:text-ink-dark">{part}</strong>
+    )
+  );
+}
+
 export default async function AboutPage() {
   const [sections, profile] = await Promise.all([getAboutSections(), getProfile()]);
   const grouped = groupByType(sections);
@@ -142,28 +150,15 @@ export default async function AboutPage() {
                     </div>
                     {content.bullets && content.bullets.length > 0 && (
                       <ul className="space-y-2">
-                        {content.bullets.slice(0, 3).map((item, i) => (
+                        {content.bullets.map((item, i) => (
                           <li
                             key={i}
                             className="text-sm text-ink-secondary dark:text-ink-dark-secondary pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-px before:bg-ink-muted"
                           >
-                            {item}
+                            <ResumeText text={item} />
                           </li>
                         ))}
                       </ul>
-                    )}
-                    {content.bullets && content.bullets.length > 3 && (
-                      <details className="mt-4 group">
-                        <summary className="w-fit cursor-pointer text-sm text-accent dark:text-accent-dark marker:text-accent/60">
-                          <span className="group-open:hidden">More about this role</span>
-                          <span className="hidden group-open:inline">Show less</span>
-                        </summary>
-                        <ul className="space-y-2 mt-3">
-                          {content.bullets.slice(3).map((item, i) => (
-                            <li key={i} className="text-sm text-ink-secondary dark:text-ink-dark-secondary pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-px before:bg-ink-muted">{item}</li>
-                          ))}
-                        </ul>
-                      </details>
                     )}
                   </div>
                 );
@@ -225,7 +220,7 @@ export default async function AboutPage() {
                             key={i}
                             className="text-sm text-ink-secondary dark:text-ink-dark-secondary pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-px before:bg-ink-muted"
                           >
-                            {item}
+                            <ResumeText text={item} />
                           </li>
                         ))}
                       </ul>
@@ -282,7 +277,7 @@ export default async function AboutPage() {
                             key={i}
                             className="text-sm text-ink-secondary dark:text-ink-dark-secondary pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-px before:bg-ink-muted"
                           >
-                            {item}
+                            <ResumeText text={item} />
                           </li>
                         ))}
                       </ul>
@@ -312,7 +307,13 @@ export default async function AboutPage() {
                   className="text-ink-secondary dark:text-ink-dark-secondary pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-px before:bg-ink-muted"
                 >
                   <span className="inline-flex items-center gap-2">
-                    {item.title}
+                    {item.url ? (
+                      <a href={item.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink dark:hover:decoration-ink-dark transition-colors">
+                        <ResumeText text={item.title} />
+                      </a>
+                    ) : (
+                      <span><ResumeText text={item.title} /></span>
+                    )}
                     <AuthGate>
                       <EditAboutButton section={item} />
                     </AuthGate>

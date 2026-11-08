@@ -68,7 +68,7 @@ export default function AboutEditor({ section, defaultType, defaultSortOrder, on
       if (isNew) {
         await createAboutSectionAction(data);
       } else {
-        await updateAboutSectionAction(section.id, data);
+        await updateAboutSectionAction(section.id, { ...data, url: url.trim() || null });
       }
       onClose();
     } catch (err) {
@@ -154,7 +154,7 @@ export default function AboutEditor({ section, defaultType, defaultSortOrder, on
         </div>
       )}
 
-      {(type === 'experience' || type === 'education' || type === 'publication') && (
+      {(type === 'experience' || type === 'education' || type === 'publication' || type === 'achievement') && (
         <div>
           <label className="block text-xs font-medium uppercase tracking-[0.12em] text-ink-muted mb-1">URL</label>
           <input type="url" value={url} onChange={e => setUrl(e.target.value)} className="input w-full" />
