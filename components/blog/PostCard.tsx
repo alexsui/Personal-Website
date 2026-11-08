@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import PostDate from '@/components/blog/PostDate';
 import { getPostLanguage } from '@/lib/post-language';
 
 export default function PostCard({
@@ -25,13 +26,7 @@ export default function PostCard({
           </span>
         )}
       </div>
-      <time dateTime={post.date} className="mt-1 mb-2 block text-xs font-medium uppercase tracking-label text-ink-muted">
-        {new Date(post.date).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          timeZone: 'UTC',
-        })}
-      </time>
+      <PostDate date={post.date} className="mt-1 mb-2 block text-xs font-medium uppercase tracking-label text-ink-muted" />
 
       {/* Summary */}
       <p lang={language.code} className="text-sm text-ink-secondary dark:text-ink-dark-secondary leading-relaxed line-clamp-2">

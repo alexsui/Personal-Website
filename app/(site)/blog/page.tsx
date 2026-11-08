@@ -1,4 +1,5 @@
 import PostCard from '@/components/blog/PostCard';
+import PostDate from '@/components/blog/PostDate';
 import { getPosts } from '@/lib/db/posts';
 import { getPostLanguage } from '@/lib/post-language';
 import { blogCategories, getBlogCategory, getPostCategory } from '@/lib/blog-categories';
@@ -90,7 +91,7 @@ export default async function BlogIndex({
             {featured.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
                 <h3 lang={getPostLanguage(post.summary).code} className="font-display text-xl sm:text-2xl text-ink dark:text-ink-dark group-hover:underline underline-offset-4 decoration-border dark:decoration-border-dark">{post.title}</h3>
-                <p className="mt-1 text-xs text-ink-muted">{new Date(post.date).getUTCFullYear()} · {getPostCategory(post.tags ?? [])?.label ?? 'Research'}</p>
+                <p className="mt-1 text-xs text-ink-muted"><PostDate date={post.date} /> · {getPostCategory(post.tags ?? [])?.label ?? 'Research'}</p>
               </Link>
             ))}
           </div>
