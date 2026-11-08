@@ -41,12 +41,11 @@ export default async function BlogIndex({
     <div className="container py-16 animate-fade-in">
       {/* Page Header */}
       <div className="max-w-3xl mb-12">
-        <p className="section-label mb-4">Writing</p>
         <h1 className="text-4xl sm:text-5xl font-display font-medium mb-4 text-ink dark:text-ink-dark">
           Blog
         </h1>
         <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
-          Notes on recommendation systems, AI agents, and the engineering behind them. Written mostly in Traditional Chinese.
+          Notes on recommendation systems and AI agents, mostly in Traditional Chinese.
         </p>
         <AuthGate>
           <div className="mt-4">
@@ -98,7 +97,7 @@ export default async function BlogIndex({
         </section>
       )}
 
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-6">
+      <div className={category ? 'sr-only' : 'flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-6'}>
         <h2 className="font-sans text-sm font-semibold text-ink dark:text-ink-dark">{category?.label ?? (tag ? `Tag: ${tag}` : 'All posts')}</h2>
         {tag && <a href="/blog" className="text-xs underline underline-offset-4 text-ink-secondary dark:text-ink-dark-secondary">Clear filter</a>}
       </div>
@@ -108,7 +107,7 @@ export default async function BlogIndex({
         {posts.map((p) => (
           <div key={p.slug} className="py-8 first:pt-0 last:pb-0 flex items-start gap-3">
             <div className="flex-1 min-w-0">
-              <PostCard post={p} />
+              <PostCard post={p} activeCategory={category} activeTag={tag} />
             </div>
             <EditPostButton post={p} />
           </div>

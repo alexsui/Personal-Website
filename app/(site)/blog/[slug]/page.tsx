@@ -3,6 +3,7 @@ import { getPostLanguage } from '@/lib/post-language';
 import { getPostCategory } from '@/lib/blog-categories';
 import { getSession } from '@/lib/auth';
 import { mdToHtml } from '@/lib/markdown';
+import PostBody from '@/components/blog/PostBody';
 import Link from 'next/link';
 import EditPostButton from '@/components/admin/EditPostButton';
 import { createPageMetadata, createPersonStructuredData, SITE_URL } from '@/lib/seo';
@@ -58,7 +59,10 @@ export default async function PostPage({ params }: Props) {
     );
 
   const language = getPostLanguage(post.content);
-  const [html, profile] = await Promise.all([mdToHtml(post.content), getProfile().catch(() => null)]);
+  const [html, profile] = await Promise.all([
+    mdToHtml(post.content),
+    getProfile().catch(() => null),
+  ]);
   const category = getPostCategory(post.tags ?? []);
   const url = `${SITE_URL}/blog/${post.slug}`;
   const jsonLd = {
@@ -140,11 +144,7 @@ export default async function PostPage({ params }: Props) {
         <div className="h-px bg-border dark:bg-border-dark mb-10" />
 
         {/* Article content */}
-        <div
-          lang={language.code}
-          className="prose"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <PostBody html={html} language={language.code} />
       </article>
     </div>
   );

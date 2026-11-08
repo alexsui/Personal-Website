@@ -28,7 +28,6 @@ export default async function HomePage() {
     href: `/projects/${selectedCollection.slug}`,
     alt: 'A bridge over the Tamsui River at sunset, with a moored boat in the foreground',
     title: 'An evening in Tamsui',
-    caption: 'A bridge, a boat, and the last light on the river.',
     location: selectedCollection.location,
   } : undefined;
   const previewCollections = collections.filter((collection) => collection.id !== selectedCollection?.id).slice(0, 2);

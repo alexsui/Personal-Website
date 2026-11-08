@@ -11,6 +11,8 @@ import {
 } from '@/app/actions/posts';
 import { renderMarkdown } from '@/app/actions/markdown';
 import { DbPost } from '@/lib/db/types';
+import { getPostLanguage } from '@/lib/post-language';
+import PostBody from '@/components/blog/PostBody';
 
 type Props = {
   post?: DbPost;
@@ -207,14 +209,13 @@ export default function PostEditor({ post, onClose }: Props) {
           />
         ) : (
           <div
-            className="prose border border-border dark:border-border-dark rounded-xl p-4"
+            className="border border-border dark:border-border-dark rounded-xl p-4"
             style={{ minHeight: '400px' }}
-            dangerouslySetInnerHTML={{
-              __html:
-                previewHtml ||
-                '<p class="text-ink-muted">Nothing to preview</p>',
-            }}
-          />
+          >
+            {content && previewHtml
+              ? <PostBody html={previewHtml} language={getPostLanguage(content).code} preview />
+              : <p className="text-ink-muted">Nothing to preview</p>}
+          </div>
         )}
       </div>
 

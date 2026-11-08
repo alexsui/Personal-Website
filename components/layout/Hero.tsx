@@ -14,19 +14,15 @@ export default function Hero({ profile }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_14rem] items-center gap-12">
           {/* Text Content */}
           <div className="animate-fade-in-up">
-            {/* Section label */}
-            <div className="flex items-center gap-2 mb-6">
-              <p className="section-label">Portfolio</p>
+            <div className="flex flex-wrap items-baseline gap-3 mb-6">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-medium leading-[1.05] text-ink dark:text-ink-dark">
+                Hi, I&apos;m{' '}
+                <span className="italic">{profile.name.split(' ')[0]}</span>
+              </h1>
               <AuthGate>
                 <EditProfileButton profile={profile} />
               </AuthGate>
             </div>
-
-            {/* Main heading — large editorial serif */}
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-medium leading-[1.05] mb-6 text-ink dark:text-ink-dark">
-              Hi, I&apos;m{' '}
-              <span className="italic">{profile.name.split(' ')[0]}</span>
-            </h1>
 
             <p className="text-base sm:text-lg font-medium text-ink dark:text-ink-dark mb-5">
               Machine Learning Engineer · {PROFESSIONAL_FOCUS}

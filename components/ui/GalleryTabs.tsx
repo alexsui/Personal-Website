@@ -33,24 +33,26 @@ export default function GalleryTabs({ collections, moments }: Props) {
       <div className="flex items-center gap-6 mb-10">
         <button
           onClick={() => setTab('stories')}
+          aria-pressed={tab === 'stories'}
           className={`text-sm font-medium transition-colors ${
             tab === 'stories'
-              ? 'text-ink dark:text-ink-dark'
+              ? 'text-ink dark:text-ink-dark underline underline-offset-4'
               : 'text-ink-muted hover:text-ink dark:hover:text-ink-dark'
           }`}
         >
-          Stories
+          Albums
         </button>
         <span className="w-1 h-1 rounded-full bg-ink-muted" />
         <button
           onClick={() => setTab('moments')}
+          aria-pressed={tab === 'moments'}
           className={`text-sm font-medium transition-colors ${
             tab === 'moments'
-              ? 'text-ink dark:text-ink-dark'
+              ? 'text-ink dark:text-ink-dark underline underline-offset-4'
               : 'text-ink-muted hover:text-ink dark:hover:text-ink-dark'
           }`}
         >
-          Moments
+          Individual photos
         </button>
       </div>
 
@@ -99,7 +101,7 @@ export default function GalleryTabs({ collections, moments }: Props) {
               ))}
             </div>
           ) : (
-            <p className="text-ink-muted py-10">No stories yet.</p>
+            <p className="text-ink-muted py-10">No albums yet.</p>
           )}
         </>
       )}
@@ -124,7 +126,7 @@ export default function GalleryTabs({ collections, moments }: Props) {
               ))}
             </div>
           ) : (
-            <p className="text-ink-muted py-10">No moments yet.</p>
+            <p className="text-ink-muted py-10">No individual photos yet.</p>
           )}
 
           {/* Moment uploader for authenticated users */}

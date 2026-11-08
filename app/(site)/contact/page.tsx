@@ -18,12 +18,11 @@ export default async function ContactPage() {
   return (
     <div className="container py-16 animate-fade-in">
       <div className="max-w-2xl">
-        <p className="section-label mb-4">Contact</p>
         <h1 className="text-4xl sm:text-5xl font-display font-medium mb-4 text-ink dark:text-ink-dark">
           Get in touch
         </h1>
         <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed max-w-xl mb-10">
-          Have a question about something I’ve written, or want to work together? Send me an email.
+          Have a question about something I’ve written, or want to work together?
         </p>
 
         <ContactActions email={email} />

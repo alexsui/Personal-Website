@@ -1,10 +1,14 @@
 import Link from 'next/link';
 import { getPostLanguage } from '@/lib/post-language';
-import { getPostCategory } from '@/lib/blog-categories';
+import { getPostCategory, getTopicTags, type BlogCategory } from '@/lib/blog-categories';
 
 export default function PostCard({
   post,
+  activeCategory,
+  activeTag,
 }: {
+  activeCategory?: BlogCategory;
+  activeTag?: string;
   post: {
     slug: string;
     title: string;
@@ -15,11 +19,12 @@ export default function PostCard({
   };
 }) {
   const language = getPostLanguage(post.summary);
-  const category = getPostCategory(post.tags ?? []);
+  const tags = getTopicTags(post.tags ?? []).filter(tag =>
+    tag !== activeTag && (!activeCategory || getPostCategory([tag])?.id !== activeCategory.id)
+  );
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
-      {/* Title + Date */}
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <h3 lang={language.code} className="text-2xl font-display font-medium text-ink dark:text-ink-dark group-hover:opacity-60 transition-opacity">
           {post.title}
         </h3>
@@ -28,6 +33,8 @@ export default function PostCard({
             Draft
           </span>
         )}
+      </div>
+      <div className="mt-1 mb-2 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[0.8125rem] text-ink-muted">
         <time
           dateTime={post.date}
           className="text-xs font-medium uppercase tracking-label text-ink-muted whitespace-nowrap"
@@ -35,8 +42,14 @@ export default function PostCard({
           {new Date(post.date).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
+            timeZone: 'UTC',
           })}
         </time>
+        {tags.map(tag => (
+          <span key={tag} className="min-w-0 max-w-full break-words">
+            <span aria-hidden="true">· </span>{tag}
+          </span>
+        ))}
       </div>
 
       {/* Summary */}
@@ -44,12 +57,6 @@ export default function PostCard({
         {post.summary}
       </p>
 
-      {/* Topic */}
-      {category && (
-        <span className="tag mt-3">
-          {category.label}
-        </span>
-      )}
     </Link>
   );
 }

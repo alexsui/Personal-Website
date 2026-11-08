@@ -6,6 +6,11 @@ export const blogCategories = [
 
 export type BlogCategory = (typeof blogCategories)[number];
 
+export function getTopicTags(tags: string[]): string[] {
+  const normalized = tags.map(tag => tag.trim().toLowerCase());
+  return [...new Set(normalized.filter(tag => tag && tag !== 'featured'))];
+}
+
 const legacyCategoryIds: Record<string, BlogCategory['id']> = {
   ml: 'recommendation',
   engineering: 'data-engineering',

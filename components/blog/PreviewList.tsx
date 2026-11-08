@@ -20,7 +20,6 @@ type Props = {
     href: string;
     alt: string;
     title: string;
-    caption: string;
     location: string;
   };
 };
@@ -94,7 +93,6 @@ export default function PreviewList({ posts, collections, featuredPhoto }: Props
                 <figcaption className="max-w-sm">
                   <p className="section-label mb-4">{featuredPhoto.location}</p>
                   <h3 className="font-display text-3xl sm:text-4xl font-medium leading-snug text-ink dark:text-ink-dark mb-4">{featuredPhoto.title}</h3>
-                  <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed mb-8">{featuredPhoto.caption}</p>
                   <Link href={featuredPhoto.href} className="inline-flex items-center gap-2 text-sm text-accent dark:text-accent-dark underline underline-offset-4 decoration-accent/30">
                     View Tamsui album <span aria-hidden="true">→</span>
                   </Link>

@@ -45,18 +45,14 @@ export default async function GalleryPage() {
     <div className="container py-16 animate-fade-in">
       {/* Page Header */}
       <div className="max-w-3xl mb-12">
-        <div className="flex items-center gap-4 mb-4">
-          <p className="section-label">Gallery</p>
+        <div className="flex flex-wrap items-baseline gap-4">
+          <h1 className="text-4xl sm:text-5xl font-display font-medium text-ink dark:text-ink-dark">
+            Photography
+          </h1>
           <AuthGate>
             <NewCollectionButton />
           </AuthGate>
         </div>
-        <h1 className="text-4xl sm:text-5xl font-display font-medium mb-4 text-ink dark:text-ink-dark">
-          Photography
-        </h1>
-        <p className="text-ink-secondary dark:text-ink-dark-secondary leading-relaxed">
-          Photo albums from my travels, and individual frames from everyday life.
-        </p>
       </div>
 
       <GalleryTabs collections={collections} moments={moments} />

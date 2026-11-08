@@ -46,7 +46,6 @@ export default async function AboutPage() {
       <StructuredData data={jsonLd} />
       <div className="max-w-3xl">
         {/* Page Header */}
-        <p className="section-label mb-4">About</p>
         <h1 className="text-4xl sm:text-5xl font-display font-medium mb-4 text-ink dark:text-ink-dark">
           About Me
         </h1>

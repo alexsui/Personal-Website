@@ -191,6 +191,27 @@ h1, h2, h3, h4, h5, h6 {
   @apply rounded-xl my-8;
 }
 
+.prose table {
+  width: 100%;
+  margin: 1.5rem 0 2rem;
+  border-collapse: collapse;
+  border-block: 1px solid var(--ink-muted);
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.prose th, .prose td {
+  padding: 0.6rem 0;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+.prose :is(th, td) + :is(th, td) { padding-inline-start: 1rem; }
+.prose th { color: var(--ink-secondary); border-bottom: 1px solid var(--border); font-size: 0.875rem; font-weight: 500; }
+.prose :is(th, td)[align='right'] { text-align: end; font-variant-numeric: tabular-nums; }
+.prose :is(th, td)[align='center'] { text-align: center; }
+.prose td strong { font-weight: 600; }
+
 /* ============================================
    FORM STYLES
    ============================================ */
