@@ -25,6 +25,7 @@ export async function createCollectionAction(formData: {
     description: formData.description,
   });
   revalidatePath('/projects');
+  revalidatePath('/sitemap.xml');
   revalidatePath('/');
   return collection;
 }
@@ -44,6 +45,7 @@ export async function updateCollectionAction(
   await requireAuth();
   const collection = await updateCollection(id, updates);
   revalidatePath('/projects');
+  revalidatePath('/sitemap.xml');
   revalidatePath(`/projects/${collection.slug}`);
   revalidatePath('/');
   return collection;
@@ -57,6 +59,7 @@ export async function deleteCollectionAction(id: string, slug: string) {
   }
   await deleteCollection(id);
   revalidatePath('/projects');
+  revalidatePath('/sitemap.xml');
   revalidatePath(`/projects/${slug}`);
   revalidatePath('/');
 }

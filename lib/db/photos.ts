@@ -51,10 +51,19 @@ export async function createPhoto(
   return data;
 }
 
-export async function deletePhoto(id: string): Promise<void> {
+// Return whether deleting the photo updates a collection's cover and updated_at.
+export async function deletePhoto(id: string): Promise<boolean> {
   const client = getAdminClient();
+  const { data: covers, error: coverError } = await client
+    .from('collections')
+    .select('id')
+    .eq('cover_photo_id', id)
+    .limit(1);
+  if (coverError) throw coverError;
+
   const { error } = await client.from('photos').delete().eq('id', id);
   if (error) throw error;
+  return (covers?.length ?? 0) > 0;
 }
 
 export async function reorderPhotos(

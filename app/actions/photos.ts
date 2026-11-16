@@ -31,7 +31,8 @@ export async function deletePhotoAction(
 ) {
   await requireAuth();
   await deleteFile('gallery', storagePath);
-  await deletePhoto(id);
+  const deletedCoverPhoto = await deletePhoto(id);
+  if (deletedCoverPhoto) revalidatePath('/sitemap.xml');
   revalidatePath('/projects');
   if (collectionSlug) revalidatePath(`/projects/${collectionSlug}`);
   revalidatePath('/');
